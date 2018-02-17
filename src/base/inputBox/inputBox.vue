@@ -4,7 +4,7 @@
       <img :src="imgSrc">
     </span>
     <input type="text" :placeholder="placeholder" @input="inputInformation">
-    <span class="information">
+    <span class="information" @click="hanleInformation">
       {{information}}
     </span>
   </div>
@@ -36,6 +36,10 @@ export default {
         // 不合格的处理方案暂时没有
       }
       this.$emit('inputInformation', loginInformation)
+    },
+    hanleInformation () {
+      console.log(1)
+      this.$emit('getVerifyingCode')
     }
   }
 }
