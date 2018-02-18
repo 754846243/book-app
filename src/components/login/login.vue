@@ -8,11 +8,11 @@
           <img class="plantbooks" src="../../common/image/plantbooks.png"/>
         </div>
         <input-box class="cellphone" :imgSrc="cellphone" placeholder="手机号"
-        @inputInformation="inputInformation('cellphone', $event)">
+        @inputInformation="inputInformation('cellphone', $event)" :type="1">
         </input-box>
         <input-box class="securitycode" :imgSrc="securityCode" placeholder="验证码"
         information="点击获取验证码"  @inputInformation="inputInformation('securityCode', $event)"
-        @getVerifyingCode="getVerifyingCode">
+        @getVerifyingCode="getVerifyingCode" :type="2">
         </input-box>
         <div class="login-button" @click="verificate">
           <img src="../../common/image/login-button.png">
@@ -48,12 +48,18 @@ export default {
       this.loginImformation[index] = information
     },
     verificate () {
-      // 登陆
       const url = 'http://139.199.66.15:5000/api/user/login'
-      this.$http.post(url, {'phone_numbe': this.loginImformation.cellphone, 'code': this.loginImformation.securityCode})
-        .then((res) => {
-          this.login(res)
-        })
+      // 登陆
+      if (!this.loginImformation.cellphone) {
+        console.log('手机号不符合标准')
+      } else if (!this.loginImformation.securityCode) {
+        console.log('验证码为假')
+      } else {
+        this.$http.post(url, {'phone_numbe': this.loginImformation.cellphone, 'code': this.loginImformation.securityCode})
+          .then((res) => {
+            this.login(res)
+          })
+      }
     },
     login (res) {
       res = res.data.msg
@@ -66,7 +72,7 @@ export default {
     },
     getVerifyingCode () {
       // 获取验证码
-      const url = 'http://139.199.66.15:5000/api/user/register'
+      const url = 'http://139.199.66.15:5000/api/user/identify'
       this.$http.post(url, {'phone_number': this.loginImformation.cellphone})
     }
   }
@@ -137,5 +143,9 @@ export default {
   display: flex;
   position: absolute;
   font-size: 36px;
+}
+
+.cellphone{
+    margin-bottom: 66px;
 }
 </style>

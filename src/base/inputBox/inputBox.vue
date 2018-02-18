@@ -26,12 +26,17 @@ export default {
     imgSrc: {
       type: String,
       default: ''
+    },
+    type: {
+      type: Number,
+      default: 0
+      // type为1时是手机号， type为2时是验证码
     }
   },
   methods: {
     inputInformation (e) {
       let loginInformation = e.target.value
-      if (this.placeholder === '手机号' && (!cellphoneVer(loginInformation))) {
+      if (this.type === 1 && (!cellphoneVer(loginInformation))) {
         console.log('不合格')
         // 不合格的处理方案暂时没有
       }
@@ -57,7 +62,6 @@ export default {
   background: white;
   border-radius: 50px;
   vertical-align: super;
-  margin-bottom: 66px;
 }
 
 input {
