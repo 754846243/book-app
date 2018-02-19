@@ -126,6 +126,7 @@ export default {
   margin-top: 84px;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 84px;
   align-items: center;
   justify-content: center;
 }
