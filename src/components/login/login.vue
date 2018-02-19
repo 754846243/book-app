@@ -23,7 +23,7 @@
 
 <script>
 import InputBox from 'base/inputBox/inputBox'
-import {setCookie} from 'js/cookie.js'
+import {setCookie, getCookie} from 'js/cookie.js'
 
 export default {
   components: {
@@ -39,6 +39,9 @@ export default {
       }
     }
   },
+  mounted () {
+    this._judgeLogout()
+  },
   methods: {
     inputInformation (index, information) {
       this.loginImformation[index] = information
@@ -51,7 +54,7 @@ export default {
       } else if (!this.loginImformation.securityCode) {
         console.log('验证码为假')
       } else {
-        this.$http.post(url, {'phone_numbe': this.loginImformation.cellphone, 'code': this.loginImformation.securityCode})
+        this.$http.post(url, {'phone_number': this.loginImformation.cellphone, 'code': this.loginImformation.securityCode})
           .then((res) => {
             this.login(res)
           })
@@ -72,6 +75,11 @@ export default {
       // 获取验证码
       const url = 'http://139.199.66.15:5000/api/user/identify'
       this.$http.post(url, {'phone_number': this.loginImformation.cellphone})
+    },
+    _judgeLogout () {
+      if (getCookie('cellphone')) {
+        this.$router.push('/content')
+      }
     }
   }
 }

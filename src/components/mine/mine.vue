@@ -35,7 +35,7 @@
 import Card from 'base/card/card'
 import VButton from 'base/button/button'
 import ProgressCircle from 'base/progress-circle/progress-circle'
-import {getCookie, deletCookie} from 'js/cookie'
+import {deletCookie} from 'js/cookie'
 
 export default {
   components: {
@@ -56,7 +56,6 @@ export default {
   },
   mounted () {
     // 获取数据后，在设置图片，需要更改
-    this._judgeLogonStatus()
     this._gainInformation()
   },
   methods: {
@@ -64,14 +63,10 @@ export default {
       // 获取数据
       this.$refs.head.style.background = `url(${this.information.headPortrait})`
     },
-    _judgeLogonStatus () {
-      if (!getCookie('cellphone')) {
-        this.$router.push('/login')
-      }
-    },
     logout () {
       console.log(1)
       deletCookie('cellphone')
+      console.log(document.cookie)
       this.$router.push('/login')
     }
   }

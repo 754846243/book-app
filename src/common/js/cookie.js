@@ -20,5 +20,6 @@ export function getCookie (name) {
 }
 
 export function deletCookie (name) {
-  setCookie(name, '', -1)
+  let value = getCookie(name)
+  setCookie(name, value, -1)
 }
