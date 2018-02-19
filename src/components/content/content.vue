@@ -14,3 +14,13 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.content{
+  position: absolute;
+  background: #f2f6f9;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+}
+</style>

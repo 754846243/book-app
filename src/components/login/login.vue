@@ -1,6 +1,5 @@
 <template>
   <div class="login">
-    <scroll class="scroll" ref="scroll">
       <div>
         <div class="logo">
           <img class="plant-icon" src="../../common/image/plant-icon.png"/>
@@ -19,19 +18,16 @@
           <p>登录</p>
         </div>
       </div>
-    </scroll>
   </div>
 </template>
 
 <script>
 import InputBox from 'base/inputBox/inputBox'
-import Scroll from 'base/scroll/scroll'
 import {setCookie} from 'js/cookie.js'
 
 export default {
   components: {
-    InputBox,
-    Scroll
+    InputBox
   },
   data () {
     return {
@@ -81,10 +77,10 @@ export default {
 
 <style>
 .login {
-  position: fixed;
+  position: absolute;
   background: url(../../common/image/background.png) repeat-x;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
 }
 
 .scroll{
