@@ -54,8 +54,8 @@ export default {
     }
   },
   mounted () {
-  // 获取数据后，在设置图片，需要更改
-  this.$refs.head.style.background = `url(${this.information.headPortrait})`
+    // 获取数据后，在设置图片，需要更改
+    this.$refs.head.style.background = `url(${this.information.headPortrait})`
   }
 }
 </script>
