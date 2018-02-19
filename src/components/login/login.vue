@@ -58,10 +58,12 @@ export default {
       }
     },
     login (res) {
+      console.log(res)
       res = res.data.msg
       if (res === 'success') {
         // 登陆成功的处理方案
         setCookie('cellphone', this.loginImformation.cellphone)
+        this.$router.push('/content')
       } else {
         // 登陆失败的处理方案
       }
@@ -86,7 +88,7 @@ export default {
 .scroll{
   position: fixed;
   height: 100%;
-  width: 100%
+  width: 750px
 }
 
 .logo {

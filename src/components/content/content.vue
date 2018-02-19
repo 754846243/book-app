@@ -20,7 +20,7 @@ export default {
   position: absolute;
   background: #f2f6f9;
   z-index: -1;
-  width: 100%;
+  width: 750px;
   height: 100%;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="button" ref="button">
+  <div class="button" ref="button" @click="handle">
     <slot></slot>
   </div>
 </template>
@@ -14,6 +14,11 @@ export default {
   },
   mounted () {
     this.$refs.button.style.background = this.color
+  },
+  methods: {
+    handle () {
+      this.$emit('handle')
+    }
   }
 }
 </script>

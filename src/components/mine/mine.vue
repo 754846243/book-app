@@ -27,7 +27,7 @@
       <p>种子成长进度</p>
     </card>
     <v-button color="#43bf43" class="button button-one">领取种子</v-button>
-    <v-button color="#ef5353" class="button button-two">退出登录</v-button>
+    <v-button color="#ef5353" class="button button-two" @handle="logout">退出登录</v-button>
   </div>
 </template>
 
@@ -35,6 +35,7 @@
 import Card from 'base/card/card'
 import VButton from 'base/button/button'
 import ProgressCircle from 'base/progress-circle/progress-circle'
+import {getCookie, deletCookie} from 'js/cookie'
 
 export default {
   components: {
@@ -55,7 +56,24 @@ export default {
   },
   mounted () {
     // 获取数据后，在设置图片，需要更改
-    this.$refs.head.style.background = `url(${this.information.headPortrait})`
+    this._judgeLogonStatus()
+    this._gainInformation()
+  },
+  methods: {
+    _gainInformation () {
+      // 获取数据
+      this.$refs.head.style.background = `url(${this.information.headPortrait})`
+    },
+    _judgeLogonStatus () {
+      if (!getCookie('cellphone')) {
+        this.$router.push('/login')
+      }
+    },
+    logout () {
+      console.log(1)
+      deletCookie('cellphone')
+      this.$router.push('/login')
+    }
   }
 }
 </script>

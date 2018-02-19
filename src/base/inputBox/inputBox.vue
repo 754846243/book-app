@@ -37,7 +37,7 @@ export default {
     inputInformation (e) {
       let loginInformation = e.target.value
       if (this.type === 1 && (!cellphoneVer(loginInformation))) {
-        console.log('不合格')
+
         // 不合格的处理方案暂时没有
       }
       this.$emit('inputInformation', loginInformation)
