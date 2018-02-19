@@ -1,5 +1,0 @@
-1.文件的存放
-base 放置基础组件
-common/js 放置可以共用的js
-common/image 放置图片
-components 放置页面组件

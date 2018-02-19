@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from 'components/login/login'
-import 'lib-flexible'
+import Content from 'components/content/content'
+import Mine from 'components/mine/mine'
+import Backpack from 'components/backpack/backpack'
+import Flowerpot from 'components/flowerpot/flowerpot'
 
 Vue.use(Router)
 
@@ -10,8 +13,26 @@ export default new Router({
   routes: [
     {
       path: '/login',
-      name: 'Login',
       component: Login
+    },
+    {
+      path: '/content',
+      component: Content,
+      redirect: '/content/flowerpot',
+      children: [
+        {
+          path: 'mine',
+          component: Mine
+        },
+        {
+          path: 'backpack',
+          component: Backpack
+        },
+        {
+          path: 'flowerpot',
+          component: Flowerpot
+        }
+      ]
     }
   ]
 })
