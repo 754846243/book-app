@@ -22,8 +22,10 @@ export default {
   font-size: 36px;
   display: flex;
   line-height: 88px;
+  height: 88px;
   background: #4caf50;
   color: #ffffff;
+  box-shadow: 0 6px 6px #c0c2c5;
 }
 
 .tab-item{
