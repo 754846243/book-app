@@ -78,7 +78,7 @@ export default {
   border: 23px solid #009915;
   height: 224px;
   width: 224px;
-  border-radius: 50%;
+  border-radius: 112px;
   transform: rotate(45deg);
 }
 

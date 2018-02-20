@@ -56,8 +56,6 @@ export default {
   position: relative;
   align-items: center;
   width: 590px;
-  left: 50%;
-  margin-left: -295px;
   height: 100px;
   background: white;
   border-radius: 50px;

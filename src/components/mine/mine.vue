@@ -26,12 +26,15 @@
       <progress-circle class="circle" :progress="information.progress"></progress-circle>
       <p>种子成长进度</p>
     </card>
-    <v-button color="#43bf43" class="button button-one">领取种子</v-button>
-    <v-button color="#ef5353" class="button button-two" @handle="logout">退出登录</v-button>
+    <div class="button" ref="button">
+      <v-button color="#43bf43" class="button-one">领取种子</v-button>
+      <v-button color="#ef5353" class="button-two" @handle="logout">退出登录</v-button>
+    </div>
   </div>
 </template>
 
 <script>
+import Bus from 'js/bus'
 import Card from 'base/card/card'
 import VButton from 'base/button/button'
 import ProgressCircle from 'base/progress-circle/progress-circle'
@@ -57,18 +60,30 @@ export default {
   mounted () {
     // 获取数据后，在设置图片，需要更改
     this._gainInformation()
+    this._handleButton()
   },
   methods: {
     _gainInformation () {
       // 获取数据
       this.$refs.head.style.background = `url(${this.information.headPortrait})`
     },
+    _handleButton () {
+      // 获取屏幕的高度和内容块的高度，并根据此改变css
+      Bus.$on('height', (clientHeight, availHeight) => {
+        if (clientHeight > availHeight) {
+          // 当内容块的高度高于屏幕的高度后，将按钮往上移
+          this.$refs.button.style.margin = '0.6rem'
+        }
+      })
+    },
     logout () {
-      console.log(1)
       deletCookie('cellphone')
       console.log(document.cookie)
       this.$router.push('/login')
     }
+  },
+  beforeDestroy () {
+    Bus.$off('height')
   }
 }
 </script>
@@ -96,7 +111,7 @@ export default {
   width: 200px;
   height: 200px;
   border: 6px solid #463233;
-  border-radius: 50%;
+  border-radius: 100px;
   margin-left: 36px;
   margin-top: 62px;
   background-size: 2.6666rem 2.6666rem !important;
@@ -160,16 +175,18 @@ export default {
 }
 
 .button{
+  margin-top: 165px;
+}
+
+.button-one{
+  margin-top: 0;
   margin-left: auto;
   margin-right: auto;
 }
 
-.button-one{
-  margin-top: 165px;
-}
-
 .button-two{
+  margin-left: auto;
+  margin-right: auto;
   margin-top: 45px;
-  margin-bottom: 100px;
 }
 </style>

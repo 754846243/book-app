@@ -1,15 +1,15 @@
 <template>
-  <div class="login">
+  <div class="login" ref="login">
       <div>
         <div class="logo">
           <img class="plant-icon" src="../../common/image/plant-icon.png"/>
           <img class="star" src="../../common/image/star.png"/>
           <img class="plantbooks" src="../../common/image/plantbooks.png"/>
         </div>
-        <input-box class="cellphone" :imgSrc="cellphone" placeholder="手机号"
+        <input-box class="cellphone input-box" :imgSrc="cellphone" placeholder="手机号"
         @inputInformation="inputInformation('cellphone', $event)" :type="1">
         </input-box>
-        <input-box class="securitycode" :imgSrc="securityCode" placeholder="验证码"
+        <input-box class="input-box" :imgSrc="securityCode" placeholder="验证码"
         information="点击获取验证码"  @inputInformation="inputInformation('securityCode', $event)"
         @getVerifyingCode="getVerifyingCode" :type="2">
         </input-box>
@@ -41,8 +41,21 @@ export default {
   },
   mounted () {
     this._judgeLogout()
+    this._monitorHeight()
   },
   methods: {
+    _judgeLogout () {
+      if (getCookie('cellphone')) {
+        this.$router.push('/content')
+      }
+    },
+    _monitorHeight () {
+      // 动态设置content的min-height，确保全部都有背景颜色
+      setTimeout(() => {
+        let height = window.screen.height
+        this.$refs.login.style.minHeight = height + 'px'
+      }, 20)
+    },
     inputInformation (index, information) {
       this.loginImformation[index] = information
     },
@@ -75,11 +88,6 @@ export default {
       // 获取验证码
       const url = 'http://139.199.66.15:5000/api/user/identify'
       this.$http.post(url, {'phone_number': this.loginImformation.cellphone})
-    },
-    _judgeLogout () {
-      if (getCookie('cellphone')) {
-        this.$router.push('/content')
-      }
     }
   }
 }
@@ -89,14 +97,8 @@ export default {
 .login {
   position: absolute;
   background: url(../../common/image/background.png) repeat-x;
-  width: 100%;
-  min-height: 100%;
-}
-
-.scroll{
-  position: fixed;
-  height: 100%;
-  width: 750px
+  background-size: 750px auto;
+  width: 750px;
 }
 
 .logo {
@@ -107,8 +109,7 @@ export default {
 .plant-icon {
   position: absolute;
   width: 406px;
-  left: 50%;
-  margin-left: -203px;
+  margin-left: 172px;
   top: 68px;
 }
 
@@ -116,16 +117,14 @@ export default {
   position: absolute;
   top: 68px;
   width: 672px;
-  left: 50%;
-  margin-left: -336px;
+  margin-left: 39px;
 }
 
 .plantbooks {
   position: absolute;
   top: 482px;
-  height: 52px;
-  left: 50%;
-  margin-left: -234px;
+  width: 468px;
+  margin-left: 141px;
 }
 
 .login-button{
@@ -136,7 +135,6 @@ export default {
   margin-top: 84px;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 84px;
   align-items: center;
   justify-content: center;
 }
@@ -150,6 +148,11 @@ export default {
   display: flex;
   position: absolute;
   font-size: 36px;
+}
+
+.input-box{
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .cellphone{

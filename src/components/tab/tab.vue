@@ -1,5 +1,5 @@
 <template>
-  <div class="tab">
+  <div class="tab" @click="handle">
     <router-link tag="div" class="tab-item" to="/content/flowerpot">
       <span class="tab-link">花盆</span>
     </router-link>
@@ -14,6 +14,11 @@
 
 <script>
 export default {
+  methods: {
+    handle () {
+      this.$emit('handle')
+    }
+  }
 }
 </script>
 
