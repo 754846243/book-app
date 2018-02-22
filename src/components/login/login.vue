@@ -79,6 +79,7 @@ export default {
       if (res === 'success') {
         // 登陆成功的处理方案
         setCookie('cellphone', this.loginImformation.cellphone)
+        console.log(document.cookie)
         this.$router.push('/content')
       } else {
         // 登陆失败的处理方案
@@ -156,6 +157,6 @@ export default {
 }
 
 .cellphone{
-    margin-bottom: 66px;
+  margin-bottom: 66px;
 }
 </style>

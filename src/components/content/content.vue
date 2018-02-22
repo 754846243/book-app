@@ -17,14 +17,15 @@ export default {
   mounted () {
     // 获取数据后，在设置图片，需要更改
     this._judgeLogonStatus()
-    this._monitorHeight()
-    this._handleButton()
   },
   methods: {
     // 如果不是登陆状态，跳转到login页面
     _judgeLogonStatus () {
       if (!getCookie('cellphone')) {
         this.$router.push('/login')
+      } else {
+        this._monitorHeight()
+        this._handleButton()
       }
     },
     _monitorHeight () {
@@ -39,6 +40,7 @@ export default {
       setTimeout(() => {
         let clientHeight = this.$refs.content.clientHeight
         let availHeight = window.screen.availHeight
+        // let availHeight = document.documentElement.clientHeight
         Bus.$emit('height', clientHeight, availHeight)
       }, 20)
     },

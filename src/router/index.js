@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from 'components/login/login'
 import Content from 'components/content/content'
 import Mine from 'components/mine/mine'
+import Select from 'components/select/select'
 import Backpack from 'components/backpack/backpack'
 import Flowerpot from 'components/flowerpot/flowerpot'
 
@@ -14,6 +15,14 @@ export default new Router({
     {
       path: '/login',
       component: Login
+    },
+    {
+      path: '/',
+      redirect: '/login'
+    },
+    {
+      path: '/select',
+      component: Select
     },
     {
       path: '/content',
@@ -34,5 +43,6 @@ export default new Router({
         }
       ]
     }
-  ]
+  ],
+  redirect: '/login'
 })

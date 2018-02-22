@@ -111,7 +111,7 @@ export default {
   width: 200px;
   height: 200px;
   border: 6px solid #463233;
-  border-radius: 100px;
+  border-radius: 50%;
   margin-left: 36px;
   margin-top: 62px;
   background-size: 2.6666rem 2.6666rem !important;

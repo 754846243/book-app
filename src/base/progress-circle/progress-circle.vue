@@ -49,7 +49,7 @@ export default {
   display: flex;
   flex-direction: row;
   position: relative;
-  width: 270px;
+  width: 272.5px;
   height: 270px;
   align-items: center;
   justify-content: center;
@@ -78,7 +78,7 @@ export default {
   border: 23px solid #009915;
   height: 224px;
   width: 224px;
-  border-radius: 112px;
+  border-radius: 50%;
   transform: rotate(45deg);
 }
 

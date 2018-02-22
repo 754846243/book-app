@@ -29,6 +29,7 @@ export default {
 *{
   margin: 0;
   padding: 0;
-  font-family: 'regular'
+  font-family: 'regular';
+  color: #333333;
 }
 </style>
