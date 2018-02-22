@@ -1,17 +1,31 @@
 <template>
   <div class="select-component" ref="select">
     <img class="logo" src="../../common/image/plantbooks.png">
-    <div class="name">
-      <p>输入昵称:</p>
-      <input type="text" :value="name">
+    <div v-if="first" ref="first">
+      <div class="name">
+        <p>输入昵称:</p>
+        <input type="text" :value="name">
+      </div>
+      <p class="title">选择您最感兴趣的类别吧!</p>
+      <ul class="selectionList">
+        <li class="selection" v-for="(item, index) in selectionList" :key="index" @click="selectCategory(index)">
+          {{item.selection}}
+        </li>
+      </ul>
+      <div class="button button-one" ref="button" @click="goOn">继续</div>
     </div>
-    <p class="title">选择你最喜欢的一类书吧!</p>
-    <ul class="selectionList">
-      <li class="selection" v-for="(item, index) in selectionList" :key="index">
-        {{item.selection}}
-      </li>
-    </ul>
-    <div class="button" ref="button">继续</div>
+    <div v-else>
+      <div class="title">
+        <p class="title">选择您最喜欢的一类书吧!</p>
+        <h1>{{category.selection}}</h1>
+      </div>
+      <ul class="selectionList">
+        <li class="selection" v-for="(item, index) in optionList" :key="index" @click="selectSCategory(index)">
+          {{item}}
+        </li>
+      </ul>
+      <div class="button button-two" ref="button">开启种书之旅</div>
+    </div>
   </div>
 </template>
 
@@ -45,7 +59,13 @@ export default {
           selection: '成功励志'
         }
       ],
-      name: ''
+      name: '',
+      first: true,
+      category: {},
+      optionList: [
+        // 假数据
+        '文学经典', '散文随笔', '日记书信', '演讲访谈', '传记回忆'],
+      sCategory: []
     }
   },
   mounted () {
@@ -57,12 +77,35 @@ export default {
         let clientHeight = this.$refs.select.clientHeight
         let availHeight = window.screen.availHeight
         if (clientHeight > availHeight) {
-          console.log(0)
-          this.$refs.button.style.marginTop = '-15px'
+          this.$refs.button.style.marginTop = '-5px'
         } else if (clientHeight > availHeight - 50) {
           this.$refs.button.style.marginTop = '0px'
         }
       }, 20)
+    },
+    selectCategory (index) {
+      let target = this.$refs.first.getElementsByTagName('li')[index]
+      if (JSON.stringify(this.category) === '{}') {
+        // 当原本所选为空时
+        target.style.background = '#47c047'
+        target.style.color = '#f2f6f9'
+        this.category = this.selectionList[index]
+      } else if (this.category === this.selectionList[index]) {
+        // 当原本所选和现在所点相同时
+        target.style.background = '#f2f6f9'
+        target.style.color = '#47c047'
+        this.category = {}
+      } else {
+        // 当选了不止一项时
+        console.log('只能选择一项')
+      }
+    },
+    goOn () {
+      if (!(JSON.stringify(this.category) === '{}')) {
+        this.first = false
+        this._judgeButton()
+        // 将所选项post出去并且收到数据，暂时没有接口，没有写
+      }
     }
   }
 }
@@ -78,8 +121,8 @@ img{
   display: flex;
   flex-wrap: wrap;
   margin-top: 60px;
-  padding: 0px 40px;
-  justify-content: space-between;
+  padding: 0px 8px;
+  justify-content: center;
 }
 
 .selection{
@@ -92,7 +135,7 @@ img{
   align-items: center;
   justify-content: center;
   font-size: 36px;
-  margin-bottom: 70px;
+  margin: 0 33px 70px;
 }
 
 .name{
@@ -113,15 +156,17 @@ img{
   border-top: transparent;
   border-right: transparent;
   border-left: transparent;
+  background: #f2f6f9;
+  outline:none
 }
 
-.title{
+p.title{
   font-size: 50px;
   text-align: center;
 }
 
 .button{
-  width: 227px;
+
   height: 80px;
   line-height: 80px;
   text-align: center;
@@ -130,5 +175,26 @@ img{
   color: #ffffff;
   border-radius: 50px;
   margin: 103px auto 0px auto;
+}
+
+.button-one{
+  width: 227px;
+}
+
+.button-two{
+  width: 340px;
+}
+
+.title{
+  margin-top: 12px;
+}
+
+h1{
+  text-align: center;
+  font-weight: normal;
+  font-size: 72px;
+  text-align: center;
+  margin-top: 55px;
+  margin-bottom: -6px;
 }
 </style>
