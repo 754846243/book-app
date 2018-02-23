@@ -46,7 +46,6 @@ export default {
 <style scoped>
 .content{
   position: absolute;
-  z-index: -1;
   width: 750px;
 }
 </style>
