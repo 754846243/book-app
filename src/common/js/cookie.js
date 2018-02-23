@@ -14,14 +14,12 @@ export function getCookie (name) {
     if (!(end === -1)) {
       return decodeURIComponent(document.cookie.slice(start, end))
     } else {
-      return decodeURIComponent(document.cookie.slice(start, 0))
+      return decodeURIComponent(document.cookie.slice(start))
     }
   }
 }
 
 export function deletCookie (name) {
   let value = getCookie(name)
-  console.log(value)
-  console.log(name)
   setCookie(name, value, -1)
 }
