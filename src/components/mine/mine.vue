@@ -26,9 +26,9 @@
       <progress-circle class="circle" :progress="information.progress"></progress-circle>
       <p>种子成长进度</p>
     </card>
-    <div class="button" ref="button">
-      <v-button color="#43bf43" class="button-one">领取种子</v-button>
-      <v-button color="#ef5353" class="button-two" @handle="logout">退出登录</v-button>
+    <div class="button-box" ref="button">
+      <div class="button button-one">领取种子</div>
+      <div class="button button-two" @click="logout">退出登录</div>
     </div>
   </div>
 </template>
@@ -36,14 +36,12 @@
 <script>
 import Bus from 'js/bus'
 import Card from 'base/card/card'
-import VButton from 'base/button/button'
 import ProgressCircle from 'base/progress-circle/progress-circle'
 import {deletCookie} from 'js/cookie'
 
 export default {
   components: {
     Card,
-    VButton,
     ProgressCircle
   },
   data () {
@@ -78,7 +76,6 @@ export default {
     },
     logout () {
       deletCookie('cellphone')
-      console.log(document.cookie)
       this.$router.push('/login')
     }
   },
@@ -174,19 +171,34 @@ export default {
   margin-top: 40px;
 }
 
-.button{
+.button-box{
   margin-top: 165px;
+}
+
+.button{
+  width: 309px;
+  height: 63px;
+  border-radius: 31.5px;
+  color: #ffffff;
+  display: flex;
+  font-size: 32px;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 0px 2px -2px #e1e5e7, -2px 0px 2px -2px #e1e5e7,
+    0px 5px 5px 5px #d9dde0;
 }
 
 .button-one{
   margin-top: 0;
   margin-left: auto;
   margin-right: auto;
+  background: #43bf43;
 }
 
 .button-two{
   margin-left: auto;
   margin-right: auto;
   margin-top: 45px;
+  background: #ef5353;
 }
 </style>

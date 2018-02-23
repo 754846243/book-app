@@ -45,6 +45,7 @@ export default {
   },
   methods: {
     _judgeLogout () {
+      console.log(document.cookie)
       if (getCookie('cellphone')) {
         this.$router.push('/content')
       }
@@ -79,7 +80,6 @@ export default {
       if (res === 'success') {
         // 登陆成功的处理方案
         setCookie('cellphone', this.loginImformation.cellphone)
-        console.log(document.cookie)
         this.$router.push('/content')
       } else {
         // 登陆失败的处理方案

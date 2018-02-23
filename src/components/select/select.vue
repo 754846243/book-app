@@ -12,7 +12,11 @@
           {{item.selection}}
         </li>
       </ul>
-      <div class="button button-one" ref="button" @click="goOn">继续</div>
+      <div class="button-wrapper">
+        <div class="button" @click="goOn">
+          继续
+        </div>
+      </div>
     </div>
     <div v-else>
       <div class="title">
@@ -24,7 +28,11 @@
           {{item}}
         </li>
       </ul>
-      <div class="button button-two" ref="button">开启种书之旅</div>
+      <div class="button-wrapper" ref="button">
+        <div class="button">
+          开启种书之旅
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -163,26 +171,6 @@ img{
 p.title{
   font-size: 50px;
   text-align: center;
-}
-
-.button{
-
-  height: 80px;
-  line-height: 80px;
-  text-align: center;
-  font-size: 36px;
-  background: #43bf43;
-  color: #ffffff;
-  border-radius: 50px;
-  margin: 103px auto 0px auto;
-}
-
-.button-one{
-  width: 227px;
-}
-
-.button-two{
-  width: 340px;
 }
 
 .title{

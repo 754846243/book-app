@@ -43,7 +43,6 @@ export default {
       this.$emit('inputInformation', loginInformation)
     },
     hanleInformation () {
-      console.log(1)
       this.$emit('getVerifyingCode')
     }
   }
