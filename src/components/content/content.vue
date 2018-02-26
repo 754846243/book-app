@@ -23,7 +23,8 @@ export default {
   methods: {
     // 如果不是登陆状态，跳转到login页面
     _judgeLogonStatus () {
-      if (!getCookie('cellphone')) {
+      console.log(getCookie('token'))
+      if (!getCookie('token')) {
         this.$router.push('/login')
       } else {
         this._handleButton()

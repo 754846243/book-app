@@ -76,6 +76,7 @@ export default {
     },
     logout () {
       deletCookie('cellphone')
+      deletCookie('token')
       this.$router.push('/login')
     }
   },

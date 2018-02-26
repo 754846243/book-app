@@ -13,9 +13,8 @@
         information="点击获取验证码"  @inputInformation="inputInformation('securityCode', $event)"
         @getVerifyingCode="getVerifyingCode" :type="2">
         </input-box>
-        <div class="login-button" @click="verificate">
-          <img src="../../common/image/login-button.png">
-          <p>登录</p>
+        <div class="button" @click="verificate">
+          登陆
         </div>
       </div>
   </div>
@@ -45,9 +44,8 @@ export default {
   },
   methods: {
     _judgeLogout () {
-      console.log(document.cookie)
-      if (getCookie('cellphone')) {
-        this.$router.push('/content')
+      if (getCookie('token')) {
+        this.$router.push('/content/mine')
       }
     },
     _monitorHeight () {
@@ -75,12 +73,20 @@ export default {
       }
     },
     login (res) {
-      console.log(res)
-      res = res.data.msg
-      if (res === 'success') {
+      console.log(res.data)
+      var vnew = res.data.new
+      var token = res.data.token
+      var response = res.data.msg
+      console.log(vnew)
+      if (response === 'success') {
         // 登陆成功的处理方案
         setCookie('cellphone', this.loginImformation.cellphone)
-        this.$router.push('/content')
+        setCookie('token', token)
+        if (!vnew) {
+          this.$router.push('/content/flowerpot')
+        } else {
+          this.$router.push('/select')
+        }
       } else {
         // 登陆失败的处理方案
       }
@@ -128,27 +134,20 @@ export default {
   margin-left: 141px;
 }
 
-.login-button{
-  position: relative;
-  display: flex;
-  width: 240px;
-  height: 109.6px;
-  margin-top: 84px;
-  margin-left: auto;
-  margin-right: auto;
-  align-items: center;
-  justify-content: center;
-}
-
-.login-button img{
-  position: absolute;
-  width: 240px;
-}
-
-.login-button p{
-  display: flex;
-  position: absolute;
+.button{
+  margin: 100px 0 0px 261px;;
+  z-index: 5;
+  display: inline-block;
+  height: 80px;
+  width: 227px;
+  line-height: 80px;
+  text-align: center;
+  background: #43bf43;
+  color: #ffffff;
   font-size: 36px;
+  border-radius: 50px;
+  box-shadow: 2px 0px 2px -2px #bbe473, -2px 0px 2px -2px #bbe473,
+    0px 5px 5px 5px #bbe473;
 }
 
 .input-box{

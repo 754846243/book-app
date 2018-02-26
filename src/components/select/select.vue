@@ -1,83 +1,107 @@
 <template>
   <div class="select-component" ref="select">
     <img class="logo" src="../../common/image/plantbooks.png">
-    <div v-if="first" ref="first">
-      <div class="name">
-        <p>输入昵称:</p>
-        <input type="text" :value="name">
-      </div>
-      <p class="title">选择您最感兴趣的类别吧!</p>
+    <div class="name">
+      <p>输入昵称:</p>
+      <input type="text" :value="name">
+    </div>
+    <div class="title">
+      <p class="title">选择您最喜欢的一类书吧!</p>
+    </div>
+    <div v-show="firstpage">
       <ul class="selectionList">
-        <li class="selection" v-for="(item, index) in selectionList" :key="index" @click="selectCategory(index)">
+        <li class="selection" v-for="(item, index) in optionListOne" :key="index" @click="selectCategory(index,'one')" ref="optionOne">
           {{item.selection}}
         </li>
       </ul>
-      <div class="button-wrapper">
-        <div class="button" @click="goOn">
-          继续
-        </div>
-      </div>
+      <div class="nextpage" @click="nextPage">下一页 ></div>
     </div>
-    <div v-else>
-      <div class="title">
-        <p class="title">选择您最喜欢的一类书吧!</p>
-        <h1>{{category.selection}}</h1>
-      </div>
+    <div v-show="!firstpage">
       <ul class="selectionList">
-        <li class="selection" v-for="(item, index) in optionList" :key="index" @click="selectSCategory(index)">
-          {{item}}
+        <li class="selection" v-for="(item, index) in optionListTwo" :key="index" @click="selectCategory(index,'two')" ref="optionTwo">
+          {{item.selection}}
         </li>
       </ul>
-      <div class="button-wrapper" ref="button">
-        <div class="button">
-          开启种书之旅
-        </div>
+      <div class="nextpage" @click="nextPage">下一页 ></div>
+      <div class="button" ref="button" @click="plantbooks">
+        开启种书之旅
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import {getCookie} from 'js/cookie'
 export default {
   data () {
     return {
-      selectionList: [
+      optionListOne: [
         {
-          id: 0,
+          id: 100,
           selection: '小说'
         },
         {
-          id: 1,
+          id: 101,
           selection: '文学'
         },
         {
-          id: 2,
-          selection: '人文社科'
+          id: 107,
+          selection: '生活'
         },
         {
-          id: 3,
+          id: 103,
           selection: '经济管理'
         },
         {
-          id: 4,
+          id: 104,
+          selection: '科技科普'
+        },
+        {
+          id: 106,
+          selection: '成功励志'
+        },
+        {
+          id: 2,
+          selection: '杂志'
+        },
+        {
+          id: 102,
+          selection: '人文社科'
+        },
+        {
+          id: 108,
+          selection: '少儿'
+        }
+      ],
+      optionListTwo: [
+        {
+          id: 109,
+          selection: '艺术设计'
+        },
+        {
+          id: 105,
           selection: '计算机与互联网'
         },
         {
-          id: 5,
-          selection: '成功励志'
+          id: 110,
+          selection: '漫画绘本'
+        },
+        {
+          id: 111,
+          selection: '教育考试'
         }
       ],
       name: '',
-      first: true,
       category: {},
-      optionList: [
-        // 假数据
-        '文学经典', '散文随笔', '日记书信', '演讲访谈', '传记回忆'],
-      sCategory: []
+      sCategory: [],
+      firstpage: true
     }
   },
   mounted () {
     this._judgeButton()
+    setTimeout(() => {
+      getCookie('token')
+    }, 20)
   },
   methods: {
     _judgeButton () {
@@ -85,34 +109,48 @@ export default {
         let clientHeight = this.$refs.select.clientHeight
         let availHeight = window.screen.availHeight
         if (clientHeight > availHeight) {
-          this.$refs.button.style.marginTop = '-5px'
-        } else if (clientHeight > availHeight - 50) {
           this.$refs.button.style.marginTop = '0px'
+        } else if (clientHeight > availHeight - 50) {
+          this.$refs.button.style.marginTop = '50px'
         }
       }, 20)
     },
-    selectCategory (index) {
-      let target = this.$refs.first.getElementsByTagName('li')[index]
+    selectCategory (index, oneOrTwo) {
+      let target
+      if (oneOrTwo === 'one') {
+        target = this.$refs.optionOne[index]
+      } else if (oneOrTwo === 'two') {
+        target = this.$refs.optionTwo[index]
+      }
       if (JSON.stringify(this.category) === '{}') {
         // 当原本所选为空时
         target.style.background = '#47c047'
         target.style.color = '#f2f6f9'
-        this.category = this.selectionList[index]
-      } else if (this.category === this.selectionList[index]) {
+        if (oneOrTwo === 'one') {
+          this.category = this.optionListOne[index]
+          console.log('one')
+        } else if (oneOrTwo === 'two') {
+          this.category = this.optionListTwo[index]
+          console.log('two')
+        }
+      } else if (this.category === this.optionListOne[index] || this.category === this.optionListTwo[index]) {
         // 当原本所选和现在所点相同时
         target.style.background = '#f2f6f9'
-        target.style.color = '#47c047'
+        target.style.color = '#333333'
         this.category = {}
       } else {
         // 当选了不止一项时
-        console.log('只能选择一项')
+        console.log('不止选择了一项')
       }
     },
-    goOn () {
-      if (!(JSON.stringify(this.category) === '{}')) {
-        this.first = false
-        this._judgeButton()
-        // 将所选项post出去并且收到数据，暂时没有接口，没有写
+    nextPage () {
+      this.firstpage = !this.firstpage
+    },
+    plantbooks () {
+      let url = 'http://139.199.66.15:5000/api/book/seed'
+      if (JSON.stringify(this.category) !== '{}') {
+        this.$http.post(url, {'first_type': this.category.id})
+        this.$router.push('/content/flowerpot')
       }
     }
   }
@@ -122,6 +160,7 @@ export default {
 <style scoped>
 img{
   width: 468px;
+  height: auto;
   margin: 72px 140px 65px;
 }
 
@@ -130,7 +169,7 @@ img{
   flex-wrap: wrap;
   margin-top: 60px;
   padding: 0px 8px;
-  justify-content: center;
+  justify-content: left;
 }
 
 .selection{
@@ -143,7 +182,7 @@ img{
   align-items: center;
   justify-content: center;
   font-size: 36px;
-  margin: 0 33px 70px;
+  margin: 0 33px 64px;
 }
 
 .name{
@@ -182,7 +221,28 @@ h1{
   font-weight: normal;
   font-size: 72px;
   text-align: center;
-  margin-top: 55px;
-  margin-bottom: -6px;
+  margin: 55px 0 -6px 0;
+}
+
+.nextpage{
+  margin: -16px 0 0 590px;
+  right: 38px;
+  font-size: 30px;
+}
+
+.button{
+  margin: 148px 0 0px 205px;;
+  z-index: 5;
+  display: inline-block;
+  height: 80px;
+  width: 340px;
+  line-height: 80px;
+  text-align: center;
+  background: #43bf43;
+  color: #ffffff;
+  font-size: 36px;
+  border-radius: 50px;
+  box-shadow: 2px 0px 2px -2px #e1e5e7, -2px 0px 2px -2px #e1e5e7,
+    0px 5px 5px 5px #d9dde0;
 }
 </style>
