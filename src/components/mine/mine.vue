@@ -2,7 +2,7 @@
   <div class="mine">
     <card :height="3.84" class="card-one card">
       <div class="head-portrait">
-        <div class="head" ref="head">
+        <div class="head" ref="head" @click="uploadHeadImage">
           <img class="sapling" src="./sapling.png">
         </div>
       </div>
@@ -13,13 +13,7 @@
             <img src="./reading.png">
           </span>
           <p>当前在读：{{information.reading}}</p>
-          </div>
-        <div class="detail">
-          <span class="icon">
-            <img src="./mark.png">
-          </span>
-          <p>兴趣标签：{{information.mark}}</p>
-          </div>
+        </div>
       </div>
     </card>
     <card class="card-two card" :height="5.866">
@@ -49,7 +43,6 @@ export default {
       information: {
         name: '郑丹妮',
         reading: '文学',
-        mark: '文学史',
         progress: 0,
         headPortrait: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1519055748057&di=6bfaeba671d1740b66a76376b1525804&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2Ff9198618367adab40ec3ee5c81d4b31c8701e49a.jpg'
       }
@@ -78,7 +71,8 @@ export default {
       deletCookie('cellphone')
       deletCookie('token')
       this.$router.push('/login')
-    }
+    },
+    uploadHeadImage () {}
   },
   beforeDestroy () {
     Bus.$off('height')

@@ -1,16 +1,14 @@
 <template>
   <div class="flowerpot">
-    <div v-if="currentPage === 0">
+    <div v-show="currentPage === 0">
       <img class="flower first" src="./flowerpot.png">
-      <div class="button-wrapper button-one">
-        <div class="button" @click="seedSeed">
-          埋下种子
-        </div>
+      <div class="button button-one" @click="seedSeed">
+        埋下种子
       </div>
       <div class="popup" v-show="popupIsActive">
         <div class="content">
           <img src="./sapling.png">
-          <p>您有一颗{{category}}种子，您想种下它吗？</p>
+          <p>您有一颗{{seedCategory}}种子，您想种下它吗？</p>
         </div>
         <div class="option">
           <span class="option-one" @click="yes">是的</span>
@@ -18,24 +16,20 @@
         </div>
       </div>
     </div>
-    <div v-else-if="currentPage === 1">
+    <div v-show="currentPage === 1">
       <div v-if="myLike < 14">
         <img v-show="myLike < 5" class="flower first" src="./seed.png">
         <img v-show="myLike < 10 && myLike >= 5" class="flower second" src="./seedling.png">
         <img v-show="myLike < 14 && myLike >= 10" class="flower third" src="./leaf.png">
         <img v-show="myLike === 14" class="flower fourth" src="./bloom.png">
-        <div class="button-wrapper button-two">
-          <div class="button" @click="next">成长</div>
-        </div>
+        <div class="button button-two" @click="next">成长</div>
       </div>
       <div v-else>
         <img v-show="myLike === 14" class="flower fourth" src="./bloom.png">
-        <div class="button-wrapper button-two">
-          <div class="button" @click="gain">收获</div>
-        </div>
+        <div class="button button-two" @click="gain">收获</div>
       </div>
     </div>
-    <div v-else-if="currentPage === 2">
+    <div v-if="currentPage === 2">
       <content-box @like="addLike" @unlike="nextRecommend">
         <!-- 文摘内容 -->
       </content-box>
@@ -55,7 +49,6 @@ export default {
     return {
       currentPage: 0,
       popupIsActive: false,
-      category: '',
       myLike: 14,
       optionList: [
         {
@@ -111,7 +104,8 @@ export default {
           selection: '教育考试'
         }
       ],
-      number: 0
+      number: 0,
+      seedCategory: ''
     }
   },
   components: {
@@ -120,23 +114,34 @@ export default {
   },
   mounted () {
     setTimeout(() => {
-      this._checkSeed()
+      if (!localStorage.getItem('seedCategory')) {
+        // 如果没有seedId则查看当前的所有种子
+        console.log(localStorage.getItem('seedCategory'))
+        this._checkSeed()
+      } else {
+        // 得到种子的id和种子的类别
+        this.seedId = localStorage.getItem('seedId')
+        this.seedCategory = localStorage.getItem('seedCategory')
+        this.currentPage = 1
+      }
     }, 20)
   },
   methods: {
     _checkSeed () {
+      // 查看自己的所有种子
       let url = 'http://139.199.66.15:5000/api/user/seed'
       this.$http.get(url).then((res) => {
         this._handleSeed(res.data.data)
       })
     },
     _handleSeed (data) {
+      // 在自己的所有种子中轮流选择
       const LENGTH = data.length
       if (this.number === LENGTH) {
         this.number = 0
       }
       var categoryId = data[this.number].first_type
-      this.category = this._gaincategory(categoryId) // 种子的类别
+      this.seedCategory = this._gaincategory(categoryId) // 种子的类别
       this.seedId = data[this.number].seed_id // 种子
       this.seedStatus = data[this.number].status // 种子当前的状态
     },
@@ -148,48 +153,64 @@ export default {
         }
       }
     },
-    _writeBookInformation (img, name, introduction, category) {
-      localStorage.setItem('bookImg', img)
-      localStorage.setItem('bookName', name)
-      localStorage.setItem('bookIntroduction', introduction)
-      localStorage.setItem('category', category)
+    _writeBookInformation (data) {
+      localStorage.setItem('bookImg', data.book_img_url)
+      localStorage.setItem('bookName', data.book_name)
+      localStorage.setItem('bookIntroduction', data.introduction)
+      localStorage.setItem('bookCategory', this.seedCategory)
+      localStorage.setItem('author', data.author)
     },
     seedSeed () {
       this.popupIsActive = true
     },
     yes () {
-      // 种子种植
+      // 确定种植种子
+
+      // 保存已经种植的种子信息，供重新打开页面时使用
+      localStorage.setItem('seedCategory', this.seedCategory)
+      localStorage.setItem('seedId', this.seedId)
+
+      // 获得书籍的信息
       let that = this
       const URL = 'http://139.199.66.15:5000/api/seed/book'
       this.$http.post(URL, {'seed_id': this.seedId}).then((res) => {
-        console.log(res.data)
-        that.second_type = res.data.data.second_type
-        that.bookImg = res.data.data.book_img_url
-        that.bookName = res.data.data.book_name
-        that.bookIntroduction = res.data.data.introduction
-        that._writeBookInformation(that.bookImg, that.bookName, that.bookIntroduction, that.category)
-        // this.grow()
+        console.log(res.data.data)
+        that._writeBookInformation(res.data.data)
+        localStorage.setItem('bookId', res.data.data.book_id)
+        localStorage.setItem('secondType', res.data.data.second_type)
+        // that.grow()
       })
-      that.next()
+
+      this.next()
+      // this._deletSeed()
+    },
+    _deletSeed () {
+      // 删除种子
+      const URL = 'http://139.199.66.15:5000/api/seed/remove'
+      this.$http.post(URL, {'seed_id': this.seedId}).then((res) => {
+        console.log(res)
+      })
     },
     next () {
+      // 页面跳转到下一面，关闭弹窗
       this.currentPage++
       this.popupIsActive = false
     },
     grow () {
       // 种子成长时的信息
       const URL = 'http://139.199.66.15:5000/api/seed/grown'
-      console.log(this.seedId)
-      console.log(this.second_type)
-      this.$http.post(URL, {'seed_id': this.seedId, 'second_type': this.second_type}).then((res) => {
+      let secondType = localStorage.getItem('secondType')
+      this.$http.post(URL, {'seed_id': this.seedId, 'second_type': secondType}).then((res) => {
         console.log(res)
       })
     },
     no () {
+      // 页面跳转到下一页，下一次点击埋下种子时换成下一粒种子
       this.popupIsActive = false
       this.number++
     },
     addLike () {
+      // 点击喜欢时我的喜欢加一
       this.myLike++
       this.nextRecommend()
     },
@@ -229,8 +250,10 @@ export default {
    margin-top: 72px;
 }
 
-.button-one, button-two{
+.button-one{
   margin-top: 166px;
+  width: 277px;
+  margin-left: 236.5px;
 }
 
 .popup{
@@ -271,17 +294,10 @@ export default {
   border-right: 1px solid #333333;
 }
 
-.button-wrapper{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .button{
   z-index: 5;
   height: 80px;
   line-height: 80px;
-  padding: 0px 75px;
   background: #43bf43;
   color: #ffffff;
   font-size: 36px;
@@ -295,5 +311,7 @@ export default {
 
 .button-two{
   margin-top: 166px;
+  width: 220px;
+  margin-left: 265px;
 }
 </style>

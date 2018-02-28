@@ -38,9 +38,7 @@ export default {
     _setSliderWidth () {
       let content = this.$refs.box.children[0].innerHTML
       let width = content.length * this.fontSize
-      console.log(width)
       this.$refs.box.style.width = width + 'px'
-      console.log(width)
     },
     _initScroll () {
       if (!this.$refs.wrapper) {

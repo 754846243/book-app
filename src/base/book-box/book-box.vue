@@ -9,7 +9,7 @@
           <scroll-x class="scrollX" :fontSize="24">
             <h1>{{bookName}}</h1>
           </scroll-x>
-          <h2>作者: </h2>
+          <h2>作者: <span class="author">{{author}}</span></h2>
           <h2>标签：{{category}}</h2>
         </div>
         <scroll class="scroll">
@@ -39,6 +39,7 @@ export default {
       this.bookName = localStorage.getItem('bookName')
       this.bookIntroduction = localStorage.getItem('bookIntroduction')
       this.category = localStorage.getItem('category')
+      this.author = localStorage.getItem('author')
     },
     handle () {
       this.$emit('handle')
@@ -108,6 +109,7 @@ h1{
 }
 
 h2{
+  vertical-align: top;
   font-size: 24px;
   color: #444444;
   margin-bottom: 14px;
@@ -132,5 +134,11 @@ p{
   margin-top: 113px;
   margin-bottom: 20px;
   overflow: hidden;
+}
+
+.author{
+  vertical-align: top;
+  display: inline-block;
+  width: 180px;
 }
 </style>

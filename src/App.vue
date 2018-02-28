@@ -30,16 +30,6 @@ export default {
     src : url('common/fonts/PingFang-Regular.ttf');
 }
 
-@font-face{
-    font-family: 'bold';
-    src : url('common/fonts/PingFang-Bold.ttf');
-}
-
-@font-face{
-    font-family: 'light';
-    src : url('common/fonts/PingFang-Light.ttf');
-}
-
 *{
   margin: 0;
   padding: 0;
