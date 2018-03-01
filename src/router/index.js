@@ -6,6 +6,7 @@ import Mine from 'components/mine/mine'
 import Select from 'components/select/select'
 import Backpack from 'components/backpack/backpack'
 import Flowerpot from 'components/flowerpot/flowerpot'
+import Seed from 'components/seed/seed'
 
 Vue.use(Router)
 
@@ -25,6 +26,10 @@ export default new Router({
       component: Select
     },
     {
+      path: '/test',
+      component: Seed
+    },
+    {
       path: '/content',
       component: Content,
       redirect: '/content/flowerpot',
@@ -35,7 +40,13 @@ export default new Router({
         },
         {
           path: 'backpack',
-          component: Backpack
+          component: Backpack,
+          children: [
+            {
+              path: 'seed',
+              component: Seed
+            }
+          ]
         },
         {
           path: 'flowerpot',
