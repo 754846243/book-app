@@ -5,13 +5,13 @@
           <img :src="bookImg">
         </div>
         <div class="information">
-          <scroll-x class="scrollX" :fontSize="24">
+          <scroll-x class="scroll-x" :fontSize="24" :data="bookName" :width="121">
             <h1>{{bookName}}</h1>
           </scroll-x>
-          <h2>作者: <span class="author">{{author}}</span></h2>
+          <h2>作者: <span class="author" :data="author">{{author}}</span></h2>
           <h2>标签：{{tags}}</h2>
         </div>
-        <scroll class="scroll">
+        <scroll class="scroll" :data="bookIntroduction">
           <p>{{bookIntroduction}}</p>
         </scroll>
       </div>
@@ -116,7 +116,7 @@ p{
   overflow: hidden;
 }
 
-.scrollX{
+.scroll-x{
   position: relative;
   white-space: nowrap;
   margin-top: 113px;

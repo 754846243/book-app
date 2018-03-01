@@ -57,6 +57,9 @@ export default {
   methods: {
     _gainInformation () {
       // 获取数据
+      const url = 'http://139.199.66.15:5000/api/user/mine'
+      this.$http.get(url)
+      this.$refs.head.style.background = `url(${this.information.headPortrait})`
     },
     _handleButton () {
       // 获取屏幕的高度和内容块的高度，并根据此改变css

@@ -24,18 +24,17 @@
         <div class="button button-two" @click="next">成长</div>
       </div>
       <div v-else>
-        <img v-show="seedStatus === 16" class="flower fourth" src="./bloom.png">
+        <img class="flower fourth" src="./bloom.png">
         <div class="button button-two" @click="gain">收获</div>
       </div>
     </div>
     <div v-if="currentPage === 2">
       <content-box @like="addLike" @unlike="nextRecommend" :bookName="bookName" :bookIntroduction="bookIntroduction"
       :author="author">
-        <!-- 文摘内容 -->
       </content-box>
     </div>
     <div v-else-if="currentPage === 3">
-      <book-box @handle="close" bookName="bookName" :bookIntroduction="bookIntroduction" :bookImage="bookImage"
+      <book-box @handle="close" :bookName="bookName" :bookIntroduction="bookIntroduction" :bookImage="bookImage"
       :author="author" :tags="tags"></book-box>
     </div>
   </div>
@@ -44,6 +43,7 @@
 <script>
 import ContentBox from 'base/content-box/content-box'
 import BookBox from 'base/book-box/book-box'
+import Bus from 'js/bus'
 
 export default {
   data () {
@@ -110,7 +110,8 @@ export default {
       bookName: '',
       bookIntroduction: '',
       author: '',
-      tags: ''
+      tags: '',
+      bookImage: ''
     }
   },
   components: {
@@ -118,17 +119,7 @@ export default {
     ContentBox
   },
   mounted () {
-    localStorage.clear()
-    if (!localStorage.getItem('seedCategory')) {
-      // 如果当地储存没有seedId则查看当前的所有种子
-      this._checkSeed()
-    } else {
-      // 如果有得到种子的id和种子的类别
-      this.seedId = localStorage.getItem('seedId')
-      this.seedCategory = localStorage.getItem('seedCategory')
-      this.seedStatus = localStorage.getItem('seedStatus')
-      this.currentPage = 1
-    }
+    this._checkSeed()
   },
   methods: {
     _checkSeed () {
@@ -136,15 +127,17 @@ export default {
       // 查看自己的所有种子,如果种子里面有status大于1的则跳到喜欢，否则跳到埋下种子
       let url = 'http://139.199.66.15:5000/api/user/seed'
       this.$http.get(url).then((res) => {
+        if (!res.data.data) {
+          // 如果没有种子，跳到选择页面
+          this.seedId = false
+          return
+        }
         let seed = this._handleSeed(res.data.data)
         if (seed) {
           this.seedId = seed.seed_id
           this.seedCategory = this._gaincategory(seed.first_type)
           this.seedStatus = seed.status
           this.currentPage = 1
-          localStorage.setItem('seedId', this.seedId)
-          localStorage.setItem('seedCategory', this.seedCategory)
-          localStorage.setItem('seedStatus', this.seedStatus)
         } else {
           this._selectSeed(res.data.data)
         }
@@ -167,7 +160,7 @@ export default {
       var categoryId = data[this.number].first_type
       this.seedCategory = this._gaincategory(categoryId) // 种子的类别
       this.seedId = data[this.number].seed_id // 种子
-      this.seedStatus = data[this.number].status // 种子当前的状态
+      this.seedStatus = Number(data[this.number].status) // 种子当前的状态
     },
     _gaincategory (categoryId) {
       // 通过从后端获得first_type获得种子的类别
@@ -186,14 +179,14 @@ export default {
     },
     seedSeed () {
       this.popupIsActive = true
+      if (!this.seedId) {
+        this.popupIsActive = false
+        Bus.$emit('isName', false)
+        this.$router.push('/select')
+      }
     },
     yes () {
       // 确定种植种子
-
-      // 保存已经种植的种子信息，供重新打开页面时可重复使用
-      localStorage.setItem('seedCategory', this.seedCategory)
-      localStorage.setItem('seedId', this.seedId)
-
       // 获得书籍的信息
       this.next()
       this.grow()
@@ -204,7 +197,7 @@ export default {
       const URL = 'http://139.199.66.15:5000/api/seed/book'
       this.$http.post(URL, {'seed_id': this.seedId}).then((res) => {
         let data = res.data.data
-        console.log(data)
+        console.log(res)
         that.bookName = data.book_name
         that.bookIntroduction = data.introduction
         that.author = data.author
@@ -239,6 +232,7 @@ export default {
       this.grow()
     },
     gain () {
+      this._deletSeed()
       let url = 'http://139.199.66.15:5000/api/seed/gain'
       let that = this
       console.log(this.seedId)
@@ -258,12 +252,6 @@ export default {
     close () {
       // 回到埋下种子页面
       this.currentPage = 0
-
-      // 清除关于种子的信息
-      localStorage.removeItem('seedId')
-      localStorage.removeItem('seedCategory')
-
-      this._deletSeed()
     }
   }
 }

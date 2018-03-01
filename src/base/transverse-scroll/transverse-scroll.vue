@@ -34,6 +34,7 @@ export default {
   },
   mounted () {
     setTimeout(() => {
+      console.log(this.width)
       this.$refs.wrapper.style.width = this.width + 'px'
       this._setSliderWidth()
       this._initScroll()

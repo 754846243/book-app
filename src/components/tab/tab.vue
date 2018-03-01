@@ -43,7 +43,7 @@ export default {
   width: 182px;
 }
 
-.router-link-exact-active .tab-link{
+.router-link-active .tab-link{
   border-bottom: 4px solid #ffffff;
 }
 </style>

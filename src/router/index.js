@@ -6,6 +6,8 @@ import Mine from 'components/mine/mine'
 import Select from 'components/select/select'
 import Backpack from 'components/backpack/backpack'
 import Flowerpot from 'components/flowerpot/flowerpot'
+import Seed from 'components/seed/seed'
+import Book from 'components/book/book'
 
 Vue.use(Router)
 
@@ -23,6 +25,18 @@ export default new Router({
     {
       path: '/select',
       component: Select
+    },
+    {
+      path: '/test',
+      component: Seed
+    },
+    {
+      path: '/seed',
+      component: Seed
+    },
+    {
+      path: '/book',
+      component: Book
     },
     {
       path: '/content',
