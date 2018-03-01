@@ -30,6 +30,10 @@ export default new Router({
       component: Seed
     },
     {
+      path: '/seed',
+      component: Seed
+    },
+    {
       path: '/content',
       component: Content,
       redirect: '/content/flowerpot',
@@ -40,13 +44,7 @@ export default new Router({
         },
         {
           path: 'backpack',
-          component: Backpack,
-          children: [
-            {
-              path: 'seed',
-              component: Seed
-            }
-          ]
+          component: Backpack
         },
         {
           path: 'flowerpot',

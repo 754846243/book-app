@@ -1,10 +1,8 @@
 <template>
   <div class="content">
     <v-tab></v-tab>
-    <div class="seed-list">    
-        <div v-for="item in seed_datas"
-        v-bind:key="item.key" 
-        v-bind:class="seed"><div class="seed-border"><p>{{ item }}</p></div>
+    <div class="seed-list">
+        <div v-for="seed in seed_datas" v-bind:key="seed.key" class="seed"><div class="seed-border"><p>{{ seed }}</p></div>
         </div>
     </div>
   </div>
@@ -15,11 +13,16 @@ import VTab from 'components/tab/tab_back'
 import {getCookie} from 'js/cookie'
 
 export default {
-  data: {
-    seed_datas: [ 1, 2, 3, 4, 5 ]
+  data () {
+    return {
+      seed_datas: ['文学', '科技', '绘本', '历史']
+    }
   },
   components: {
     VTab
+  },
+  mounted () {
+    this._getSeed()
   },
   methods: {
     // 如果不是登陆状态，跳转到login页面
@@ -31,14 +34,14 @@ export default {
         this._handleButton()
       }
     },
-    // _getSeed () {
-    //   const url = 'http://139.199.66.15:5000/api/user/seed'
-    //   var rp_data
-    //   this.$http.get(url).then(function(res) {
-    //     rp_data=res
-    //   })
-    //   return rp_data;
-    // }
+    _getSeed () {
+      const url = 'http://139.199.66.15:5000/api/user/seed'
+      var rp_data
+      this.$http.get(url).then(function(res) {
+        rp_data=res
+      })
+      return rp_data
+    }
   }
 }
 </script>
@@ -88,7 +91,7 @@ export default {
 
 .seed{
   flex: 33.33%;
-  margin-bottom: 25px;  
+  margin-bottom: 25px;
   justify-content: center;
   align-items: center;
 }
@@ -101,6 +104,7 @@ export default {
   border-radius: 1000px;
   width: 175px;
   height: 172px;
+  margin: 0;
 }
 
 .seed p{

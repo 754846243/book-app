@@ -1,12 +1,14 @@
 <template>
   <div class="mine">
-    <card :height="3.84" class="card-one card">
-      <div class="img-zone">
-        <img src="./seed.png">
-      </div>
-      <p>我的种子</p>
-      <img class="right-arrow" src="./arrow.png">
-    </card>
+    <router-link tag="div" to="/seed">
+      <card :height="3.84" class="card-one card">
+        <div class="img-zone">
+          <img src="./seed.png">
+        </div>
+        <p>我的种子</p>
+        <img class="right-arrow" src="./arrow.png">
+      </card>
+    </router-link>
     <card class="card-two card" :height="3.84">
       <div class="img-zone">
         <img src="./book.png">
