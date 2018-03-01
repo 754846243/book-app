@@ -20,16 +20,21 @@ export default {
       default: true
     },
     data: {
-      type: Array,
+      type: String,
       default: null
     },
     fontSize: {
       type: Number,
       default: 12
+    },
+    width: {
+      type: Number,
+      default: 0
     }
   },
   mounted () {
     setTimeout(() => {
+      this.$refs.wrapper.style.width = this.width + 'px'
       this._setSliderWidth()
       this._initScroll()
     }, 20)
@@ -50,11 +55,15 @@ export default {
         scrollY: false,
         scrollX: true
       })
+    },
+    refresh () {
+      this.scroll && this.scroll.refresh()
     }
   },
   watch: {
     data () {
       setTimeout(() => {
+        this._setSliderWidth()
         this.refresh()
       }, 20)
     }
@@ -64,7 +73,6 @@ export default {
 
 <style scoped>
 .wrapper{
-  width:244px;
   overflow: hidden;
 }
 </style>

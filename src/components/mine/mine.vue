@@ -2,8 +2,9 @@
   <div class="mine">
     <card :height="3.84" class="card-one card">
       <div class="head-portrait">
-        <div class="head" ref="head" @click="uploadHeadImage">
+        <div class="head" :style="'backgroundImage:url(' + information.headPortrait + ')'">
           <img class="sapling" src="./sapling.png">
+          <input type="file" class="file" accept="image" @change="uploadHeadImage">
         </div>
       </div>
       <div class="information">
@@ -21,7 +22,7 @@
       <p>种子成长进度</p>
     </card>
     <div class="button-box" ref="button">
-      <div class="button button-one">领取种子</div>
+      <div class="button button-one" @click="gainSeed">领取种子</div>
       <div class="button button-two" @click="logout">退出登录</div>
     </div>
   </div>
@@ -56,7 +57,6 @@ export default {
   methods: {
     _gainInformation () {
       // 获取数据
-      this.$refs.head.style.background = `url(${this.information.headPortrait})`
     },
     _handleButton () {
       // 获取屏幕的高度和内容块的高度，并根据此改变css
@@ -67,12 +67,50 @@ export default {
         }
       })
     },
+    _imgPreview (file) {
+      let that = this
+
+      // 看支持不支持FileReader
+      if (!window.FileReader) return
+
+      if (/^image/.test(file.type)) {
+        // 创建一个reader
+        let reader = new FileReader()
+        // 将图片2将转成 base64 格式
+        reader.readAsDataURL(file)
+        // 读取成功后的回调
+        reader.onloadend = function () {
+          let result = this.result
+          let img = new Image()
+          img.src = result
+          that.headerImage = this.result
+          console.log(that.headerImage)
+          that._postImg()
+        }
+      }
+    },
+    _postImg () {
+      // 上传图片
+      console.log('post')
+      const URL = 'http://139.199.66.15:5000/api/user/head_img'
+      this.$http.post(URL, this.headerImage)
+    },
     logout () {
       deletCookie('cellphone')
       deletCookie('token')
+      localStorage.clear()
       this.$router.push('/login')
     },
-    uploadHeadImage () {}
+    uploadHeadImage (e) {
+      let files = e.target.files || e.dataTransfer.files
+      if (!files.length) return
+      this.picValue = files[0]
+      this._imgPreview(this.picValue)
+    },
+    gainSeed () {
+      this.$router.push('/select')
+      Bus.$emit('isName', false)
+    }
   },
   beforeDestroy () {
     Bus.$off('height')
@@ -114,6 +152,18 @@ export default {
   width: 79px;
   top: -60px;
   left: 50px;
+}
+
+.file{
+  position: absolute;
+  display: inline-block;
+  background: transparent;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 50%;
+  color: transparent;
+  opacity: 0;
 }
 
 .information{

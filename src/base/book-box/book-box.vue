@@ -1,6 +1,5 @@
 <template>
   <div class="content-box">
-    <!-- <scroll class="scroll"> -->
       <div class="content">
         <div class="img">
           <img :src="bookImg">
@@ -10,13 +9,12 @@
             <h1>{{bookName}}</h1>
           </scroll-x>
           <h2>作者: <span class="author">{{author}}</span></h2>
-          <h2>标签：{{category}}</h2>
+          <h2>标签：{{tags}}</h2>
         </div>
         <scroll class="scroll">
           <p>{{bookIntroduction}}</p>
         </scroll>
       </div>
-    <!-- </scroll> -->
     <div class="button" @click="handle">关闭</div>
   </div>
 </template>
@@ -30,17 +28,8 @@ export default {
     Scroll,
     ScrollX
   },
-  created () {
-    this._gainBookInformation()
-  },
+  props: ['bookImg', 'bookName', 'bookIntroduction', 'author', 'tags'],
   methods: {
-    _gainBookInformation () {
-      this.bookImg = localStorage.getItem('bookImg')
-      this.bookName = localStorage.getItem('bookName')
-      this.bookIntroduction = localStorage.getItem('bookIntroduction')
-      this.category = localStorage.getItem('category')
-      this.author = localStorage.getItem('author')
-    },
     handle () {
       this.$emit('handle')
     }
@@ -123,7 +112,6 @@ p{
   position: fixed;
   top: 621px;
   width: 596px;
-  bottom: 0px;
   bottom: 222px;
   overflow: hidden;
 }

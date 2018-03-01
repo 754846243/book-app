@@ -1,9 +1,9 @@
 <template>
   <div class="select-component" ref="select">
     <img class="logo" src="../../common/image/plantbooks.png">
-    <div class="name">
+    <div class="name" v-if="hasName">
       <p>输入昵称:</p>
-      <input type="text" :value="name">
+      <input type="text" :value="name" @input="inputName">
     </div>
     <div class="title">
       <p class="title">选择您最喜欢的一类书吧!</p>
@@ -32,6 +32,8 @@
 
 <script>
 import {getCookie} from 'js/cookie'
+import Bus from 'js/bus'
+
 export default {
   data () {
     return {
@@ -94,13 +96,17 @@ export default {
       name: '',
       category: {},
       sCategory: [],
-      firstpage: true
+      firstpage: true,
+      hasName: false
     }
   },
   mounted () {
     this._judgeButton()
     setTimeout(() => {
       getCookie('token')
+      Bus.$on('isName', hasName => {
+        this.hasName = hasName
+      })
     }, 20)
   },
   methods: {
@@ -114,6 +120,9 @@ export default {
           this.$refs.button.style.marginTop = '50px'
         }
       }, 20)
+    },
+    inputName (e) {
+      this.name = e.target.value
     },
     selectCategory (index, oneOrTwo) {
       let target
@@ -149,10 +158,18 @@ export default {
     plantbooks () {
       let url = 'http://139.199.66.15:5000/api/book/seed'
       if (JSON.stringify(this.category) !== '{}') {
-        this.$http.post(url, {'first_type': this.category.id})
+        console.log(this.category.id)
+        if (!this.name) {
+          this.$http.post(url, {'first_type': this.category.id})
+        } else {
+          this.$http.post(url, {'first_type': this.category.id, 'nick_name': this.name})
+        }
         this.$router.push('/content/flowerpot')
       }
     }
+  },
+  beforeDestroy () {
+    Bus.$off('isName')
   }
 }
 </script>

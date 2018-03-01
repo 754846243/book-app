@@ -18,7 +18,7 @@ export default {
       default: true
     },
     data: {
-      type: Array,
+      type: String,
       default: null
     }
   },

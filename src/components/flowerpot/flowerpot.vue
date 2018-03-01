@@ -17,25 +17,26 @@
       </div>
     </div>
     <div v-show="currentPage === 1">
-      <div v-if="myLike < 14">
-        <img v-show="myLike < 5" class="flower first" src="./seed.png">
-        <img v-show="myLike < 10 && myLike >= 5" class="flower second" src="./seedling.png">
-        <img v-show="myLike < 14 && myLike >= 10" class="flower third" src="./leaf.png">
-        <img v-show="myLike === 14" class="flower fourth" src="./bloom.png">
+      <div v-if="seedStatus <= 15">
+        <img v-show="seedStatus < 7" class="flower first" src="./seed.png">
+        <img v-show="seedStatus < 12 && seedStatus >= 7" class="flower second" src="./seedling.png">
+        <img v-show="seedStatus < 16 && seedStatus >= 12" class="flower third" src="./leaf.png">
         <div class="button button-two" @click="next">成长</div>
       </div>
       <div v-else>
-        <img v-show="myLike === 14" class="flower fourth" src="./bloom.png">
+        <img v-show="seedStatus === 16" class="flower fourth" src="./bloom.png">
         <div class="button button-two" @click="gain">收获</div>
       </div>
     </div>
     <div v-if="currentPage === 2">
-      <content-box @like="addLike" @unlike="nextRecommend">
+      <content-box @like="addLike" @unlike="nextRecommend" :bookName="bookName" :bookIntroduction="bookIntroduction"
+      :author="author">
         <!-- 文摘内容 -->
       </content-box>
     </div>
     <div v-else-if="currentPage === 3">
-      <book-box @handle="close"></book-box>
+      <book-box @handle="close" bookName="bookName" :bookIntroduction="bookIntroduction" :bookImage="bookImage"
+      :author="author" :tags="tags"></book-box>
     </div>
   </div>
 </template>
@@ -49,7 +50,7 @@ export default {
     return {
       currentPage: 0,
       popupIsActive: false,
-      myLike: 14,
+      seedStatus: 0,
       optionList: [
         {
           id: 100,
@@ -105,7 +106,11 @@ export default {
         }
       ],
       number: 0,
-      seedCategory: ''
+      seedCategory: '',
+      bookName: '',
+      bookIntroduction: '',
+      author: '',
+      tags: ''
     }
   },
   components: {
@@ -113,28 +118,47 @@ export default {
     ContentBox
   },
   mounted () {
-    setTimeout(() => {
-      if (!localStorage.getItem('seedCategory')) {
-        // 如果没有seedId则查看当前的所有种子
-        console.log(localStorage.getItem('seedCategory'))
-        this._checkSeed()
-      } else {
-        // 得到种子的id和种子的类别
-        this.seedId = localStorage.getItem('seedId')
-        this.seedCategory = localStorage.getItem('seedCategory')
-        this.currentPage = 1
-      }
-    }, 20)
+    localStorage.clear()
+    if (!localStorage.getItem('seedCategory')) {
+      // 如果当地储存没有seedId则查看当前的所有种子
+      this._checkSeed()
+    } else {
+      // 如果有得到种子的id和种子的类别
+      this.seedId = localStorage.getItem('seedId')
+      this.seedCategory = localStorage.getItem('seedCategory')
+      this.seedStatus = localStorage.getItem('seedStatus')
+      this.currentPage = 1
+    }
   },
   methods: {
     _checkSeed () {
-      // 查看自己的所有种子
+      console.log('_checkSeed')
+      // 查看自己的所有种子,如果种子里面有status大于1的则跳到喜欢，否则跳到埋下种子
       let url = 'http://139.199.66.15:5000/api/user/seed'
       this.$http.get(url).then((res) => {
-        this._handleSeed(res.data.data)
+        let seed = this._handleSeed(res.data.data)
+        if (seed) {
+          this.seedId = seed.seed_id
+          this.seedCategory = this._gaincategory(seed.first_type)
+          this.seedStatus = seed.status
+          this.currentPage = 1
+          localStorage.setItem('seedId', this.seedId)
+          localStorage.setItem('seedCategory', this.seedCategory)
+          localStorage.setItem('seedStatus', this.seedStatus)
+        } else {
+          this._selectSeed(res.data.data)
+        }
       })
     },
     _handleSeed (data) {
+      console.log('_handleSeed')
+      for (let i = 0; i < data.length; ++i) {
+        if (data[i].status > 1) return data[i]
+      }
+      return false
+    },
+    _selectSeed (data) {
+      console.log('_selectSeed')
       // 在自己的所有种子中轮流选择
       const LENGTH = data.length
       if (this.number === LENGTH) {
@@ -153,37 +177,6 @@ export default {
         }
       }
     },
-    _writeBookInformation (data) {
-      localStorage.setItem('bookImg', data.book_img_url)
-      localStorage.setItem('bookName', data.book_name)
-      localStorage.setItem('bookIntroduction', data.introduction)
-      localStorage.setItem('bookCategory', this.seedCategory)
-      localStorage.setItem('author', data.author)
-    },
-    seedSeed () {
-      this.popupIsActive = true
-    },
-    yes () {
-      // 确定种植种子
-
-      // 保存已经种植的种子信息，供重新打开页面时使用
-      localStorage.setItem('seedCategory', this.seedCategory)
-      localStorage.setItem('seedId', this.seedId)
-
-      // 获得书籍的信息
-      let that = this
-      const URL = 'http://139.199.66.15:5000/api/seed/book'
-      this.$http.post(URL, {'seed_id': this.seedId}).then((res) => {
-        console.log(res.data.data)
-        that._writeBookInformation(res.data.data)
-        localStorage.setItem('bookId', res.data.data.book_id)
-        localStorage.setItem('secondType', res.data.data.second_type)
-        // that.grow()
-      })
-
-      this.next()
-      // this._deletSeed()
-    },
     _deletSeed () {
       // 删除种子
       const URL = 'http://139.199.66.15:5000/api/seed/remove'
@@ -191,18 +184,38 @@ export default {
         console.log(res)
       })
     },
-    next () {
-      // 页面跳转到下一面，关闭弹窗
-      this.currentPage++
-      this.popupIsActive = false
+    seedSeed () {
+      this.popupIsActive = true
+    },
+    yes () {
+      // 确定种植种子
+
+      // 保存已经种植的种子信息，供重新打开页面时可重复使用
+      localStorage.setItem('seedCategory', this.seedCategory)
+      localStorage.setItem('seedId', this.seedId)
+
+      // 获得书籍的信息
+      this.next()
+      this.grow()
     },
     grow () {
-      // 种子成长时的信息
-      const URL = 'http://139.199.66.15:5000/api/seed/grown'
-      let secondType = localStorage.getItem('secondType')
-      this.$http.post(URL, {'seed_id': this.seedId, 'second_type': secondType}).then((res) => {
-        console.log(res)
+      console.log('grow')
+      let that = this
+      const URL = 'http://139.199.66.15:5000/api/seed/book'
+      this.$http.post(URL, {'seed_id': this.seedId}).then((res) => {
+        let data = res.data.data
+        console.log(data)
+        that.bookName = data.book_name
+        that.bookIntroduction = data.introduction
+        that.author = data.author
+        that.secondType = data.second_type
+        this.tags = data.tags
       })
+    },
+    next () {
+      // 页面跳转到下一面，关闭弹窗
+      this.popupIsActive = false
+      this.currentPage++
     },
     no () {
       // 页面跳转到下一页，下一次点击埋下种子时换成下一粒种子
@@ -211,18 +224,46 @@ export default {
     },
     addLike () {
       // 点击喜欢时我的喜欢加一
-      this.myLike++
+      this.seedStatus++
+
+      const URL = 'http://139.199.66.15:5000/api/seed/grown'
+      this.$http.post(URL, {'seed_id': this.seedId, 'second_type': this.secondType}).then((res) => {
+        console.log(res)
+      })
+
       this.nextRecommend()
     },
     nextRecommend () {
       // 改变书摘内容
       this.currentPage = 1
+      this.grow()
     },
     gain () {
+      let url = 'http://139.199.66.15:5000/api/seed/gain'
+      let that = this
+      console.log(this.seedId)
+      this.$http.post(url, {'seed_id': this.seedId}).then((res) => {
+        console.log(res)
+        // console.log(res.data.data)
+        let data = res.data.data
+        that.author = data.author
+        that.bookName = data.book_name
+        that.bookIntroduction = data.introduction
+        that.bookImage = data.book_img_url
+        that.seedCategory = this.seedCategory
+      })
+
       this.currentPage = 3
     },
     close () {
+      // 回到埋下种子页面
       this.currentPage = 0
+
+      // 清除关于种子的信息
+      localStorage.removeItem('seedId')
+      localStorage.removeItem('seedCategory')
+
+      this._deletSeed()
     }
   }
 }

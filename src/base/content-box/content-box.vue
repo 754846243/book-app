@@ -1,10 +1,19 @@
 <template>
   <div class="content-box">
-    <scroll>
       <div class="content">
-        <slot></slot>
+        <scroll-x class="scrollX" :fontSize="24" :data="bookName" :width="300">
+          <h1>{{bookName}}</h1>
+        </scroll-x>
+        <h2>
+          <span>作者:</span>
+          <scroll-x class="scrollX" :fontSize="15" :data="author" :width="250">
+            <span>{{author}}</span>
+          </scroll-x>
+        </h2>
+        <scroll class="scroll" :data="bookIntroduction">
+          <p>{{bookIntroduction}}</p>
+        </scroll>
       </div>
-    </scroll>
     <div class="button button-one" @click="handleLike">喜欢</div>
     <div class="button button-two" @click="handleUnlike">不喜欢</div>
   </div>
@@ -12,10 +21,26 @@
 
 <script>
 import Scroll from 'base/scroll/scroll'
+import ScrollX from 'base/transverse-scroll/transverse-scroll'
 
 export default {
   components: {
-    Scroll
+    Scroll,
+    ScrollX
+  },
+  props: {
+    bookName: {
+      type: String,
+      default: ''
+    },
+    bookIntroduction: {
+      type: String,
+      default: ''
+    },
+    author: {
+      type: String,
+      default: ''
+    }
   },
   methods: {
     handleLike () {
@@ -40,12 +65,46 @@ export default {
     0px 2px 2px 2px #c0c2c5;
 }
 
+h1{
+  font-size: 48px;
+}
+
+span{
+  vertical-align: top;
+}
+
+h2{
+  vertical-align: top;
+  font-size: 30px;
+  margin-top: 18px;
+}
+
+p{
+  font-size: 30px;
+}
+
+.scroll{
+  position: fixed;
+  top: 324px;
+  left: 70px;
+  right: 70px;
+  bottom: 221px;
+  overflow: hidden;
+}
+
+.scrollX{
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 .content{
   position: fixed;
   top: 160px;
   bottom: 222px;
-  left: 68px;
-  right: 68px;
+  left: 70px;
+  right: 70px;
 }
 
 .button{

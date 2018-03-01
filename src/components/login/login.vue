@@ -23,6 +23,7 @@
 <script>
 import InputBox from 'base/inputBox/inputBox'
 import {setCookie, getCookie} from 'js/cookie.js'
+import Bus from 'js/bus'
 
 export default {
   components: {
@@ -86,6 +87,7 @@ export default {
           this.$router.push('/content/flowerpot')
         } else {
           this.$router.push('/select')
+          Bus.$emit('isName', true)
         }
       } else {
         // 登陆失败的处理方案
