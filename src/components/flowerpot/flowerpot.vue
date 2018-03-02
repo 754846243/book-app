@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import gainType from 'js/gainType'
 import ContentBox from 'base/content-box/content-box'
 import BookBox from 'base/book-box/book-box'
 import Bus from 'js/bus'
@@ -51,60 +52,6 @@ export default {
       currentPage: 0,
       popupIsActive: false,
       seedStatus: 0,
-      optionList: [
-        {
-          id: 100,
-          selection: '小说'
-        },
-        {
-          id: 101,
-          selection: '文学'
-        },
-        {
-          id: 107,
-          selection: '生活'
-        },
-        {
-          id: 103,
-          selection: '经济管理'
-        },
-        {
-          id: 104,
-          selection: '科技科普'
-        },
-        {
-          id: 106,
-          selection: '成功励志'
-        },
-        {
-          id: 2,
-          selection: '杂志'
-        },
-        {
-          id: 102,
-          selection: '人文社科'
-        },
-        {
-          id: 108,
-          selection: '少儿'
-        },
-        {
-          id: 109,
-          selection: '艺术设计'
-        },
-        {
-          id: 105,
-          selection: '计算机与互联网'
-        },
-        {
-          id: 110,
-          selection: '漫画绘本'
-        },
-        {
-          id: 111,
-          selection: '教育考试'
-        }
-      ],
       number: 0,
       seedCategory: '',
       bookName: '',
@@ -135,9 +82,10 @@ export default {
         let seed = this._handleSeed(res.data.data)
         if (seed) {
           this.seedId = seed.seed_id
-          this.seedCategory = this._gaincategory(seed.first_type)
+          this.seedCategory = gainType(seed.first_type)
           this.seedStatus = seed.status
           this.currentPage = 1
+          this.grow()
         } else {
           this._selectSeed(res.data.data)
         }
@@ -158,17 +106,9 @@ export default {
         this.number = 0
       }
       var categoryId = data[this.number].first_type
-      this.seedCategory = this._gaincategory(categoryId) // 种子的类别
+      this.seedCategory = gainType(categoryId) // 种子的类别
       this.seedId = data[this.number].seed_id // 种子
       this.seedStatus = Number(data[this.number].status) // 种子当前的状态
-    },
-    _gaincategory (categoryId) {
-      // 通过从后端获得first_type获得种子的类别
-      for (var i in this.optionList) {
-        if (categoryId === this.optionList[i].id) {
-          return this.optionList[i].selection
-        }
-      }
     },
     _deletSeed () {
       // 删除种子

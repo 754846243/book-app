@@ -13,7 +13,9 @@
           <span class="icon">
             <img src="./reading.png">
           </span>
-          <p>当前在读：{{information.reading}}</p>
+          <span class="reading">
+            <p>当前在读：{{information.reading}}</p>
+          </span>
         </div>
       </div>
     </card>
@@ -33,6 +35,7 @@ import Bus from 'js/bus'
 import Card from 'base/card/card'
 import ProgressCircle from 'base/progress-circle/progress-circle'
 import {deletCookie} from 'js/cookie'
+import gainType from 'js/gainType'
 
 export default {
   components: {
@@ -45,7 +48,7 @@ export default {
         name: '郑丹妮',
         reading: '文学',
         progress: 0,
-        headPortrait: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1519055748057&di=6bfaeba671d1740b66a76376b1525804&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2Ff9198618367adab40ec3ee5c81d4b31c8701e49a.jpg'
+        headPortrait: ''
       }
     }
   },
@@ -57,9 +60,16 @@ export default {
   methods: {
     _gainInformation () {
       // 获取数据
+      let that = this
       const url = 'http://139.199.66.15:5000/api/user/mine'
-      this.$http.get(url)
-      this.$refs.head.style.background = `url(${this.information.headPortrait})`
+      this.$http.get(url).then((res) => {
+        let data = res.data.user_info
+        that.information.progress = parseInt((data.seed_status / 15) * 100)
+        that.information.name = data.nick_name
+        that.information.reading = gainType(data.first_type)
+        that.information.headPortrait = data.head_img_url
+      })
+      // this.$refs.head.style.background = `url(${this.information.headPortrait})`
     },
     _handleButton () {
       // 获取屏幕的高度和内容块的高度，并根据此改变css
@@ -111,8 +121,8 @@ export default {
       this._imgPreview(this.picValue)
     },
     gainSeed () {
-      this.$router.push('/select')
       Bus.$emit('isName', false)
+      this.$router.push('/select')
     }
   },
   beforeDestroy () {
@@ -171,6 +181,7 @@ export default {
 
 .information{
   margin-left: 105px;
+  width: 256px;
   position: relative;
   display: inline-block;
   height: 288px;
@@ -186,6 +197,12 @@ export default {
 
 .detail{
   margin-bottom: 25px;
+}
+
+.detail .reading{
+  margin-left: 5px;
+  display: inline-block;
+  width: 210px;
 }
 
 .card-one p{

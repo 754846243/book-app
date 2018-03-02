@@ -23,7 +23,7 @@ export default {
     }
   },
   mounted () {
-    setTimeout(() => {
+    this.timer1 = setTimeout(() => {
       this._initScroll()
     }, 20)
     window.addEventListener('resize', () => {
@@ -58,10 +58,14 @@ export default {
   },
   watch: {
     data () {
-      setTimeout(() => {
+      this.timer2 = setTimeout(() => {
         this.refresh()
       }, 20)
     }
+  },
+  beforeDestroy () {
+    clearTimeout(this.timer1)
+    clearTimeout(this.timer2)
   }
 }
 </script>

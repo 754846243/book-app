@@ -32,7 +32,7 @@ export default {
     },
     _handleButton () {
       // 监听屏幕的高度和内容块的高度，并传入Bus中，管理我的界面中按钮的高度
-      setTimeout(() => {
+      this.timer = setTimeout(() => {
         let clientHeight = this.$refs.content.clientHeight
         let availHeight = window.screen.availHeight
         // let availHeight = document.documentElement.clientHeight
@@ -42,6 +42,9 @@ export default {
     handle () {
       this._handleButton()
     }
+  },
+  beforeDestroy () {
+    clearTimeout(this.timer)
   }
 }
 </script>

@@ -10,12 +10,13 @@
 
 <script>
 import VTab from 'components/tab/tab_back'
+import gainType from 'js/gainType'
 import {getCookie} from 'js/cookie'
 
 export default {
   data () {
     return {
-      seed_datas: ['文学', '科技', '绘本', '历史']
+      seed_datas: []
     }
   },
   components: {
@@ -36,11 +37,17 @@ export default {
     },
     _getSeed () {
       const url = 'http://139.199.66.15:5000/api/user/seed'
-      var rp_data
-      this.$http.get(url).then(function(res) {
-        rp_data = res
+      let that = this
+
+      this.$http.get(url).then((res) => {
+        let data = res.data.data
+        let seedType
+        for (let i = 0; i < data.length; ++i) {
+          seedType = gainType(data[i].first_type)
+          console.log(seedType)
+          that.seed_datas.push(seedType)
+        }
       })
-      return rp_data
     }
   }
 }
@@ -85,6 +92,7 @@ export default {
 
 .seed-list{
   display: flex;
+  padding-left: 45px;
   flex-wrap: wrap;
   margin: 45px 0 0 0;
 }
@@ -94,14 +102,15 @@ export default {
   margin-bottom: 25px;
   justify-content: center;
   align-items: center;
+  text-align: center;
 }
 
 .seed-border{
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid rgba(0, 0, 0, .25);
-  border-radius: 1000px;
+  border: 2px solid rgba(0, 0, 0, .25);
+  border-radius: 50%;
   width: 175px;
   height: 172px;
   margin: 0;

@@ -102,7 +102,7 @@ export default {
   },
   mounted () {
     this._judgeButton()
-    setTimeout(() => {
+    this.timer1 = setTimeout(() => {
       getCookie('token')
       Bus.$on('isName', hasName => {
         this.hasName = hasName
@@ -111,7 +111,7 @@ export default {
   },
   methods: {
     _judgeButton () {
-      setTimeout(() => {
+      this.timer2 = setTimeout(() => {
         let clientHeight = this.$refs.select.clientHeight
         let availHeight = window.screen.availHeight
         if (clientHeight > availHeight) {
@@ -159,17 +159,22 @@ export default {
       let url = 'http://139.199.66.15:5000/api/book/seed'
       if (JSON.stringify(this.category) !== '{}') {
         console.log(this.category.id)
-        if (!this.name) {
+        if (!this.hasName) {
           this.$http.post(url, {'first_type': this.category.id})
+          this.$router.push('/content/flowerpot')
         } else {
+          if (this.name) {
           this.$http.post(url, {'first_type': this.category.id, 'nick_name': this.name})
+          this.$router.push('/content/flowerpot')
+          }
         }
-        this.$router.push('/content/flowerpot')
       }
     }
   },
   beforeDestroy () {
     Bus.$off('isName')
+    clearTimeout(this.timer1)
+    clearTimeout(this.timer2)
   }
 }
 </script>

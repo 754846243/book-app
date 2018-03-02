@@ -33,7 +33,7 @@ export default {
     }
   },
   mounted () {
-    setTimeout(() => {
+    this.timer1 = setTimeout(() => {
       console.log(this.width)
       this.$refs.wrapper.style.width = this.width + 'px'
       this._setSliderWidth()
@@ -63,11 +63,15 @@ export default {
   },
   watch: {
     data () {
-      setTimeout(() => {
+      this.timer2 = setTimeout(() => {
         this._setSliderWidth()
         this.refresh()
       }, 20)
     }
+  },
+  beforeDestroy () {
+    clearTimeout(this.timer1)
+    clearTimeout(this.timer2)
   }
 }
 </script>

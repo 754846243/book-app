@@ -51,7 +51,7 @@ export default {
     },
     _monitorHeight () {
       // 动态设置content的min-height，确保全部都有背景颜色
-      setTimeout(() => {
+      this.timer = setTimeout(() => {
         let height = window.screen.height
         this.$refs.login.style.minHeight = height + 'px'
       }, 20)
@@ -62,16 +62,10 @@ export default {
     verificate () {
       const url = 'http://139.199.66.15:5000/api/user/login'
       // 登陆
-      if (!this.loginImformation.cellphone) {
-        console.log('手机号不符合标准')
-      } else if (!this.loginImformation.securityCode) {
-        console.log('验证码为假')
-      } else {
-        this.$http.post(url, {'phone_number': this.loginImformation.cellphone, 'code': this.loginImformation.securityCode})
-          .then((res) => {
-            this.login(res)
-          })
-      }
+      this.$http.post(url, {'phone_number': this.loginImformation.cellphone, 'code': this.loginImformation.securityCode})
+        .then((res) => {
+          this.login(res)
+        })
     },
     login (res) {
       console.log(res.data)
@@ -97,7 +91,10 @@ export default {
       // 获取验证码
       const url = 'http://139.199.66.15:5000/api/user/identify'
       this.$http.post(url, {'phone_number': this.loginImformation.cellphone})
-    }
+    },
+  beforeDestroy () {
+    clearTimeout(this.timer)
+  }
   }
 }
 </script>
