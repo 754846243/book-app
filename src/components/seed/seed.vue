@@ -2,8 +2,11 @@
   <div class="content">
     <v-tab name="我的种子"></v-tab>
     <div class="seed-list">
-        <div v-for="seed in seed_datas" v-bind:key="seed.key" class="seed"><div class="seed-border"><p>{{ seed }}</p></div>
+      <div v-for="seed in seed_datas" v-bind:key="seed.key" class="seed">
+        <div class="seed-border">
+          <p>{{ seed }}</p>
         </div>
+      </div>
     </div>
   </div>
 </template>
@@ -96,16 +99,13 @@ export default {
 
 .seed-list{
   display: flex;
-  padding-left: 45px;
+  justify-content: left;
   flex-wrap: wrap;
   margin: 45px 0 0 0;
 }
 
 .seed{
-  flex: 33.33%;
   margin-bottom: 25px;
-  justify-content: center;
-  align-items: center;
   text-align: center;
 }
 
@@ -115,6 +115,7 @@ export default {
   align-items: center;
   border: 2px solid rgba(0, 0, 0, .25);
   border-radius: 50%;
+  margin-left: 45px !important;
   width: 175px;
   height: 172px;
   margin: 0;

@@ -70,7 +70,7 @@ export default {
     0px 5px 5px 5px #d9dde0;
   position: absolute;
   bottom: 39px;
-  left: 215px;
+  margin-left: 215px;
 }
 
 .img{

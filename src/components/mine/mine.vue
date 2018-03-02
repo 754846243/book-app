@@ -45,8 +45,8 @@ export default {
   data () {
     return {
       information: {
-        name: '郑丹妮',
-        reading: '文学',
+        name: '',
+        reading: '',
         progress: 0,
         headPortrait: ''
       }
@@ -113,6 +113,7 @@ export default {
         if (res.data.code === 5) {
           this.$router.push('/login')
         }
+        this._gainInformation()
       })
     },
     logout () {
