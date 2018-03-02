@@ -164,8 +164,8 @@ export default {
           this.$router.push('/content/flowerpot')
         } else {
           if (this.name) {
-          this.$http.post(url, {'first_type': this.category.id, 'nick_name': this.name})
-          this.$router.push('/content/flowerpot')
+            this.$http.post(url, {'first_type': this.category.id, 'nick_name': this.name})
+            this.$router.push('/content/flowerpot')
           }
         }
       }

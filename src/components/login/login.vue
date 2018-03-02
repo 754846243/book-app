@@ -92,9 +92,9 @@ export default {
       const url = 'http://139.199.66.15:5000/api/user/identify'
       this.$http.post(url, {'phone_number': this.loginImformation.cellphone})
     },
-  beforeDestroy () {
-    clearTimeout(this.timer)
-  }
+    beforeDestroy () {
+      clearTimeout(this.timer)
+    }
   }
 }
 </script>
