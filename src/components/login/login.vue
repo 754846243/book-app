@@ -77,6 +77,7 @@ export default {
         // 登陆成功的处理方案
         setCookie('cellphone', this.loginImformation.cellphone)
         setCookie('token', token)
+        this.$http.options.headers.Authorization = token
         if (!vnew) {
           this.$router.push('/content/flowerpot')
         } else {

@@ -160,11 +160,19 @@ export default {
       if (JSON.stringify(this.category) !== '{}') {
         console.log(this.category.id)
         if (!this.hasName) {
-          this.$http.post(url, {'first_type': this.category.id})
+          this.$http.post(url, {'first_type': this.category.id}).then((res) => {
+            if (res.data.code === 5) {
+              this.$router.push('/login')
+            }
+          })
           this.$router.push('/content/flowerpot')
         } else {
           if (this.name) {
-            this.$http.post(url, {'first_type': this.category.id, 'nick_name': this.name})
+            this.$http.post(url, {'first_type': this.category.id, 'nick_name': this.name}).then((res) => {
+              if (res.data.code === 5) {
+                this.$router.push('/login')
+              }
+            })
             this.$router.push('/content/flowerpot')
           }
         }

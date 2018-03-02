@@ -1,9 +1,7 @@
 <template>
   <div class="content" ref="content">
     <v-tab @handle="handle"></v-tab>
-    <keep-alive>
       <router-view></router-view>
-    </keep-alive>
   </div>
 </template>
 

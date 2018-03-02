@@ -124,12 +124,12 @@ p{
 .button-one{
   position: absolute;
   bottom: 39px;
-  left: 65px;
+  margin-left: 65px;
 }
 
 .button-two{
   position: absolute;
   bottom: 39px;
-  right: 65px;
+  margin-left: 377px;
 }
 </style>

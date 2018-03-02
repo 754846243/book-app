@@ -40,6 +40,10 @@ export default {
       let that = this
 
       this.$http.get(url).then((res) => {
+        console.log(res)
+        if (res.data.code === 5) {
+          this.$router.push('/login')
+        }
         let data = res.data.data
         let seedType
         for (let i = 0; i < data.length; ++i) {

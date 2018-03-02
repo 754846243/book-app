@@ -50,6 +50,9 @@ export default {
     _gainData () {
       let url = 'http://139.199.66.15:5000/api/user/gains'
       this.$http.get(url).then((res) => {
+        if (res.data.code === 5) {
+          this.$router.push('/login')
+        }
         let data = res.data.data
         this._handleData(data)
       })

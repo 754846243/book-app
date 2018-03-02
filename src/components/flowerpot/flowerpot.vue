@@ -74,6 +74,9 @@ export default {
       // 查看自己的所有种子,如果种子里面有status大于1的则跳到喜欢，否则跳到埋下种子
       let url = 'http://139.199.66.15:5000/api/user/seed'
       this.$http.get(url).then((res) => {
+        if (res.data.code === 5) {
+          this.$router.push('/login')
+        }
         if (!res.data.data) {
           // 如果没有种子，跳到选择页面
           this.seedId = false
@@ -114,7 +117,9 @@ export default {
       // 删除种子
       const URL = 'http://139.199.66.15:5000/api/seed/remove'
       this.$http.post(URL, {'seed_id': this.seedId}).then((res) => {
-        console.log(res)
+        if (res.data.code === 5) {
+          this.$router.push('/login')
+        }
       })
     },
     seedSeed () {
@@ -136,6 +141,9 @@ export default {
       let that = this
       const URL = 'http://139.199.66.15:5000/api/seed/book'
       this.$http.post(URL, {'seed_id': this.seedId}).then((res) => {
+        if (res.data.code === 5) {
+          this.$router.push('/login')
+        }
         let data = res.data.data
         console.log(res)
         that.bookName = data.book_name
@@ -161,7 +169,9 @@ export default {
 
       const URL = 'http://139.199.66.15:5000/api/seed/grown'
       this.$http.post(URL, {'seed_id': this.seedId, 'second_type': this.secondType}).then((res) => {
-        console.log(res)
+        if (res.data.code === 5) {
+          this.$router.push('/login')
+        }
       })
 
       this.nextRecommend()
@@ -178,7 +188,9 @@ export default {
       console.log(this.seedId)
       this.$http.post(url, {'seed_id': this.seedId}).then((res) => {
         console.log(res)
-        // console.log(res.data.data)
+        if (res.data.code === 5) {
+          this.$router.push('/login')
+        }
         let data = res.data.data
         that.author = data.author
         that.bookName = data.book_name
