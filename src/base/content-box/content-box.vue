@@ -1,12 +1,12 @@
 <template>
   <div class="content-box">
       <div class="content">
-        <scroll-x class="scrollX" :fontSize="24" :data="bookName" :width="300">
+        <scroll-x class="scrollX" :fontSize="24" :data="bookName" :width="260">
           <h1>{{bookName}}</h1>
         </scroll-x>
         <h2>
           <span>作者:</span>
-          <scroll-x class="scrollX" :fontSize="15" :data="author" :width="250">
+          <scroll-x class="scrollX" :fontSize="15" :data="author" :width="220">
             <span>{{author}}</span>
           </scroll-x>
         </h2>

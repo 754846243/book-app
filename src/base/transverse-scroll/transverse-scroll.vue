@@ -78,6 +78,6 @@ export default {
 
 <style scoped>
 .wrapper{
-  overflow: hidden;
+  overflow: hidden !important;
 }
 </style>

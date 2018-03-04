@@ -67,7 +67,11 @@ export default {
           this.$router.push('/login')
         }
         let data = res.data.user_info
-        that.information.progress = parseInt((data.seed_status / 15) * 100)
+        if (data.seed_status < 17) {
+          that.information.progress = parseInt(((data.seed_status - 1) / 15) * 100)
+        } else {
+          that.information.progress = 100
+        }
         that.information.name = data.nick_name
         that.information.reading = gainType(data.first_type)
         that.information.headPortrait = data.head_img_url
@@ -100,7 +104,6 @@ export default {
           let img = new Image()
           img.src = result
           that.headerImage = this.result
-          console.log(that.headerImage)
           that._postImg()
         }
       }
