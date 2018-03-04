@@ -37,6 +37,7 @@
       <book-box @handle="close" :bookName="bookName" :bookIntroduction="bookIntroduction" :bookImage="bookImage"
       :author="author" :tags="tags"></book-box>
     </div>
+    <div class="mask" v-show="popupIsActive"></div>
   </div>
 </template>
 
@@ -240,39 +241,53 @@ export default {
 .popup{
   position: fixed;
   top: 360px;
-  left: 124px;
-  width: 502px;
-  height: 311px;
+  left: 90px;
+  width: 570px;
+  height: 313px;
   background: #ffffff;
+  border-radius: 60px;
+  box-shadow: 0 2px rgba(0, 0, 0, .25);
+  z-index: 2;
 }
 
 .popup .content{
-  width: 502px;
+  width: 570px;
   height: 222px;
   text-align: center;
-  border-bottom: 1px solid #333333;
 }
 
 .popup .content img{
   width: 80px;
-  margin: 28px 0px 38px;
+  margin: 28px 0px 30px;
 }
 
 .popup .content p{
   font-size: 30px;
 }
 
+.popup .option{
+  margin: 0 20px;
+}
+
 .popup .option span{
   display: inline-block;
   width: 245px;
-  height: 88px;
-  line-height: 88px;
+  height: 65px;
+  border-radius: 50px;
+  line-height: 70px;
   text-align: center;
   font-size: 30px;
+  color: #fff;
 }
 
 .popup .option .option-one{
   border-right: 1px solid #333333;
+  background-color: #43bf43;
+}
+
+.popup .option .option-two{
+  float: right;
+  background-color: #ef5353;
 }
 
 .button{
@@ -295,4 +310,14 @@ export default {
   width: 220px;
   margin-left: 265px;
 }
+
+.mask {
+  height: 100%;
+  width: 100%;
+  background-color: rgba(237, 249, 239, .5);
+  position: absolute;
+  top: 0;
+  z-index: 1;
+}
+
 </style>

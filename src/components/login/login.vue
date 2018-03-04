@@ -14,7 +14,7 @@
         @getVerifyingCode="getVerifyingCode" :type="2">
         </input-box>
         <div class="button" @click="verificate">
-          登陆
+          登录
         </div>
       </div>
   </div>
