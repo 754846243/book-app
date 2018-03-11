@@ -68,7 +68,7 @@ export default {
         }
         let data = res.data.user_info
         if (data.seed_status < 17) {
-          that.information.progress = parseInt(((data.seed_status - 1) / 15) * 100)
+          that.information.progress = parseInt((data.seed_status / 15) * 100)
         } else {
           that.information.progress = 100
         }

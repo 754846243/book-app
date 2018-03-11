@@ -17,10 +17,10 @@
       </div>
     </div>
     <div v-show="currentPage === 1">
-      <div v-if="seedStatus <= 15">
-        <img v-show="seedStatus < 7" class="flower first" src="./seed.png">
-        <img v-show="seedStatus < 12 && seedStatus >= 7" class="flower second" src="./seedling.png">
-        <img v-show="seedStatus < 16 && seedStatus >= 12" class="flower third" src="./leaf.png">
+      <div v-if="seedStatus <= 14">
+        <img v-show="seedStatus < 6" class="flower first" src="./seed.png">
+        <img v-show="seedStatus < 11 && seedStatus >= 6" class="flower second" src="./seedling.png">
+        <img v-show="seedStatus >= 11" class="flower third" src="./leaf.png">
         <div class="button button-two" @click="next">成长</div>
       </div>
       <div v-else>
@@ -98,7 +98,7 @@ export default {
     _handleSeed (data) {
       console.log('_handleSeed')
       for (let i = 0; i < data.length; ++i) {
-        if (data[i].status > 1) return data[i]
+        if (data[i].status > 0) return data[i]
       }
       return false
     },
