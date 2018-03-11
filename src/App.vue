@@ -11,7 +11,7 @@ export default {
     _monitorHeight () {
       // 动态设置min-height，确保全部都有背景颜色
       this.timer = setTimeout(() => {
-        let height = window.screen.height
+        let height = window.screen.availHeight
         this.$refs.app.style.minHeight = height + 'px'
       }, 20)
     }

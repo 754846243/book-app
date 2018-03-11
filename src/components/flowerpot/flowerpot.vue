@@ -114,15 +114,6 @@ export default {
       this.seedId = data[this.number].seed_id // 种子
       this.seedStatus = Number(data[this.number].status) // 种子当前的状态
     },
-    _deletSeed () {
-      // 删除种子
-      const URL = 'http://139.199.66.15:5000/api/seed/remove'
-      this.$http.post(URL, {'seed_id': this.seedId}).then((res) => {
-        if (res.data.code === 5) {
-          this.$router.push('/login')
-        }
-      })
-    },
     seedSeed () {
       this.popupIsActive = true
       if (!this.seedId) {
@@ -183,7 +174,6 @@ export default {
       this.grow()
     },
     gain () {
-      this._deletSeed()
       let url = 'http://139.199.66.15:5000/api/seed/gain'
       let that = this
       console.log(this.seedId)

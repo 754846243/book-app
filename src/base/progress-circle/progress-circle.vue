@@ -53,7 +53,7 @@ export default {
   height: 270px;
   align-items: center;
   justify-content: center;
-  font-size: 45px;
+  font-size: 0px;
 }
 
 .wrapper{
@@ -93,5 +93,9 @@ export default {
   right: 0;
   border-right: 23px solid #e7e7e7;
   border-top: 23px solid #e7e7e7;
+}
+
+.progress-bar span{
+  font-size: 45px;
 }
 </style>

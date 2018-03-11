@@ -63,11 +63,11 @@ export default {
       let that = this
       const url = 'http://139.199.66.15:5000/api/user/mine'
       this.$http.get(url).then((res) => {
-        if (res.data.code === 5) {
-          this.$router.push('/login')
-        }
+        // if (res.data.code === 5) {
+        //   this.$router.push('/login')
+        // }
         let data = res.data.user_info
-        if (data.seed_status < 17) {
+        if (data.seed_status < 16) {
           that.information.progress = parseInt((data.seed_status / 15) * 100)
         } else {
           that.information.progress = 100
@@ -113,9 +113,9 @@ export default {
       console.log('post')
       const URL = 'http://139.199.66.15:5000/api/user/head_img'
       this.$http.post(URL, this.headerImage).then((res) => {
-        if (res.data.code === 5) {
-          this.$router.push('/login')
-        }
+        // if (res.data.code === 5) {
+        //   this.$router.push('/login')
+        // }
         this._gainInformation()
       })
     },

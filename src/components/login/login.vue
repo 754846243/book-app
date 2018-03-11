@@ -10,7 +10,7 @@
         @inputInformation="inputInformation('cellphone', $event)" :type="1">
         </input-box>
         <input-box class="input-box" :imgSrc="securityCode" placeholder="验证码"
-        information="点击获取验证码"  @inputInformation="inputInformation('securityCode', $event)"
+        :information="information"  @inputInformation="inputInformation('securityCode', $event)"
         @getVerifyingCode="getVerifyingCode" :type="2">
         </input-box>
         <div class="button" @click="verificate">
@@ -36,7 +36,8 @@ export default {
       loginImformation: {
         cellphone: '',
         securityCode: ''
-      }
+      },
+      information: '点击获取验证码'
     }
   },
   mounted () {
@@ -91,7 +92,18 @@ export default {
     getVerifyingCode () {
       // 获取验证码
       const url = 'http://139.199.66.15:5000/api/user/identify'
-      this.$http.post(url, {'phone_number': this.loginImformation.cellphone})
+      this.$http.post(url, {'phone_number': this.loginImformation.cellphone}).then((res) => {
+        let time = 30
+        let timer = setInterval(() => {
+          if (time === 0) {
+            clearInterval(timer)
+            this.information = '点击获取验证码'
+          }
+          time--
+          this.information = String(time)
+          console.log(time)
+        }, 1000)
+      })
     },
     beforeDestroy () {
       clearTimeout(this.timer)
